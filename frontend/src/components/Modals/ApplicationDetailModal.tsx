@@ -18,9 +18,20 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
         }
     };
 
+    const statusLabels: Record<string, string> = {
+        Wishlist: 'Liste de souhaits',
+        Applied: 'Postulé',
+        'Follow-up': 'Relance',
+        Interview: 'Entretien',
+        'Technical Test': 'Test Technique',
+        Offer: 'Offre',
+        Rejected: 'Refusé',
+    };
+
     const statusColor: Record<string, string> = {
         Wishlist: 'text-gray-400 border-gray-400',
         Applied: 'text-cyber-cyan border-cyber-cyan',
+        'Follow-up': 'text-orange-400 border-orange-400',
         Interview: 'text-yellow-400 border-yellow-400',
         'Technical Test': 'text-purple-400 border-purple-400',
         Offer: 'text-cyber-green border-cyber-green',
@@ -38,7 +49,7 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
                     <div>
                         <h2 className="text-xl text-cyber-green font-mono font-bold flex items-center gap-2">
                             <Building2 className="w-5 h-5" />
-                            {application.company?.name || 'Unknown Company'}
+                            {application.company?.name || 'Entreprise inconnue'}
                         </h2>
                         <p className="text-xs text-gray-500 mt-1 font-mono">ID: {application.id}</p>
                     </div>
@@ -51,7 +62,7 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
                     {/* Status & Type badges */}
                     <div className="flex gap-3 flex-wrap">
                         <span className={`text-xs font-mono px-3 py-1 rounded border ${statusColor[application.status] || 'text-gray-400 border-gray-400'}`}>
-                            {application.status}
+                            {statusLabels[application.status] || application.status}
                         </span>
                         <span className="text-xs font-mono px-3 py-1 rounded border border-gray-600 text-gray-300">
                             {application.type}

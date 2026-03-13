@@ -14,13 +14,13 @@ export function TechFilter({ searchTerm, onSearchChange }: TechFilterProps) {
                     type="text"
                     value={searchTerm}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    placeholder="Filter by tech stack (e.g. 'Docker', 'React')..."
+                    placeholder="Filtrer par techno (ex: 'Docker', 'React')..."
                     className="w-full bg-transparent border-none text-gray-300 pl-10 pr-4 py-2 focus:outline-none placeholder-gray-600 font-mono text-sm"
                 />
             </div>
             <div className="border-l border-gray-700 pl-4 pr-2 flex items-center cursor-pointer hover:text-cyber-cyan transition-colors text-gray-500">
                 <Filter className="w-4 h-4 mr-2" />
-                <span className="text-xs">FILTERS</span>
+                <span className="text-xs">FILTRES</span>
             </div>
         </div>
     );

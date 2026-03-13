@@ -1,12 +1,13 @@
-export type ApplicationStatus = 'Wishlist' | 'Applied' | 'Interview' | 'Technical Test' | 'Rejected' | 'Offer';
+export type ApplicationStatus = 'Wishlist' | 'Applied' | 'Follow-up' | 'Interview' | 'Technical Test' | 'Rejected' | 'Offer';
 
 export const COLUMNS: { id: ApplicationStatus; title: string }[] = [
-    { id: 'Wishlist', title: 'WISHLIST' },
-    { id: 'Applied', title: 'APPLIED' },
-    { id: 'Interview', title: 'INTERVIEW' },
-    { id: 'Technical Test', title: 'TECH TEST' },
-    { id: 'Offer', title: 'OFFER' },
-    { id: 'Rejected', title: 'REJECTED' },
+    { id: 'Wishlist', title: 'LISTE DE SOUHAITS' },
+    { id: 'Applied', title: 'POSTULÉ' },
+    { id: 'Follow-up', title: 'RELANCE' },
+    { id: 'Interview', title: 'ENTRETIEN' },
+    { id: 'Technical Test', title: 'TEST TECHNIQUE' },
+    { id: 'Offer', title: 'OFFRE' },
+    { id: 'Rejected', title: 'REFUSÉ' },
 ];
 
 export type ApplicationType = 'Alternance' | 'Stage';

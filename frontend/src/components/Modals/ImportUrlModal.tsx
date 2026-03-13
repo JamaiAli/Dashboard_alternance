@@ -61,7 +61,7 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
                 <div className="flex justify-between items-center p-4 border-b border-gray-800">
                     <h2 className="text-xl text-cyber-cyan font-mono font-bold flex items-center gap-2">
                         <Globe className="w-5 h-5" />
-                        IMPORT_VIA_URL.exe
+                        IMPORTER_VIA_URL.exe
                     </h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                         <X className="w-6 h-6" />
@@ -70,7 +70,7 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div className="space-y-2">
-                        <label className="text-xs text-gray-500 font-mono">JOB POSTING URL</label>
+                        <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE D'EMPLOI</label>
                         <input
                             type="url"
                             placeholder="https://www.welcometothejungle.com/..."
@@ -93,14 +93,14 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
                             onClick={onClose}
                             className="px-4 py-2 rounded text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
                         >
-                            CANCEL
+                            ANNULER
                         </button>
                         <button
                             type="submit"
                             disabled={loading || !url}
                             className="bg-cyber-cyan text-gray-900 font-bold py-2 px-6 rounded hover:bg-cyber-cyan/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'EXTRACT'}
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'EXTRAIRE'}
                         </button>
                     </div>
                 </form>

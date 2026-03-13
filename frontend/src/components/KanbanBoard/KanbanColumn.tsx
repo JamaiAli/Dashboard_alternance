@@ -39,7 +39,7 @@ export function KanbanColumn({ id, title, applications, onRefresh }: KanbanColum
 
                 {applications.length === 0 && (
                     <div className="h-full w-full flex items-center justify-center text-gray-600 text-xs text-center p-4 border-2 border-dashed border-gray-800 rounded">
-                        Drag items here
+                        Déposez les éléments ici
                     </div>
                 )}
             </div>

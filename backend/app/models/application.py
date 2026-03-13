@@ -9,6 +9,7 @@ from app.database import Base
 class ApplicationStatus(str, enum.Enum):
     WISHLIST = "Wishlist"
     APPLIED = "Applied"
+    FOLLOW_UP = "Follow-up"
     INTERVIEW = "Interview"
     TECHNICAL_TEST = "Technical Test"
     REJECTED = "Rejected"

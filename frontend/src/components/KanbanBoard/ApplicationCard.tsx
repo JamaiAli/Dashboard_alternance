@@ -33,7 +33,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!window.confirm("Are you sure you want to delete this application?")) return;
+        if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette candidature ?")) return;
         try {
             await axios.delete(`http://localhost:8000/api/v1/applications/${application.id}`);
             onRefresh();
@@ -64,7 +64,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
             >
                 <div className="flex justify-between items-start mb-2">
                     <h4 className="font-bold text-cyber-green text-sm truncate pr-2">
-                        {application.company?.name || 'Unknown Company'}
+                        {application.company?.name || 'Entreprise inconnue'}
                     </h4>
                     <span className="text-[10px] bg-cyber-black px-1 py-0.5 rounded text-gray-400 border border-gray-800">
                         {application.type}
@@ -72,17 +72,17 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                 </div>
 
                 <div className="text-xs text-gray-400 flex flex-col gap-1">
-                    <p className="truncate">{application.company?.sector || 'No sector'}</p>
+                    <p className="truncate">{application.company?.sector || 'Secteur non défini'}</p>
                     <div className="flex justify-between items-center mt-2 border-t border-gray-800 pt-2">
                         <span className={`text-[10px] ${daysInactive >= 10 ? 'text-cyber-alert' : 'text-gray-500'}`}>
-                            Inactive: {daysInactive}d
+                            Inactif : {daysInactive}j
                         </span>
                         <div className="flex gap-1">
                             <button
                                 onPointerDown={(e) => e.stopPropagation()}
                                 onClick={() => setIsDocumentManagerOpen(true)}
                                 className="bg-gray-800 p-1.5 rounded hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
-                                title="Manage Documents"
+                                title="Gérer les documents"
                             >
                                 <Paperclip className="w-4 h-4" />
                             </button>
@@ -90,7 +90,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                                 onPointerDown={(e) => e.stopPropagation()}
                                 onClick={handleDelete}
                                 className="bg-gray-800 p-1.5 rounded hover:bg-cyber-alert/20 hover:text-cyber-alert transition-colors"
-                                title="Delete Application"
+                                title="Supprimer la candidature"
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>

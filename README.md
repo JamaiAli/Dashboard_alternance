@@ -14,7 +14,7 @@
 
 **NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
 
-- Un **tableau Kanban interactif** avec drag & drop pour déplacer vos candidatures entre les étapes (Wishlist → Applied → Interview → Technical Test → Offer / Rejected).
+- Un **tableau Kanban interactif** avec drag & drop pour déplacer vos candidatures entre les étapes (SOUHAITS → POSTULÉ → RELANCE → ENTRETIEN → TEST TECHNIQUE → OFFRE / REFUSÉ).
 - Un **panneau d'analytics** affichant les statistiques en temps réel.
 - Un **gestionnaire de documents** (CV, lettres de motivation) rattachés à chaque candidature.
 - Un **système de notes** pour consigner les échanges et remarques.
@@ -272,8 +272,8 @@ Ouvrez **http://localhost:5173** pour accéder au dashboard Kanban.
 
 | Action | Comment |
 |---|---|
-| Ajouter une candidature | Cliquer sur `+ ADD_APPLICATION` |
-| Importer via URL | Cliquer sur `> IMPORT_VIA_URL` |
+| Ajouter une candidature | Cliquer sur `+ AJOUTER_CANDIDATURE` |
+| Importer via URL | Cliquer sur `> IMPORTER_VIA_URL` |
 | Déplacer une candidature | Drag & drop entre les colonnes |
 | Ajouter une note | Cliquer sur une carte → section notes |
 | Uploader un document | Cliquer sur une carte → section documents |
@@ -332,5 +332,5 @@ Projet développé dans le cadre d'une recherche d'alternance.
 ---
 
 <p align="center">
-  <b>STI_NEXUS</b> — Conçu avec ❤️ pour optimiser la recherche d'alternance
+  <b>NEXUS</b> — Conçu avec ❤️ pour optimiser la recherche d'alternance
 </p>

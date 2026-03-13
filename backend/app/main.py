@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 
-app = FastAPI(title="Outli Suivi Alternance API", description="CRM for tracing job applications", version="1.0.0")
+app = FastAPI(title="NEXUS", description="CRM for tracing job applications", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,

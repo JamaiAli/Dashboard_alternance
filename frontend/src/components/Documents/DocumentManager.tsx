@@ -35,7 +35,7 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
             setDocuments(res.data);
         } catch (error) {
             console.error("Error fetching documents:", error);
-            setStatus({ type: 'error', msg: 'Failed to load documents list.' });
+            setStatus({ type: 'error', msg: 'Échec du chargement de la liste des documents.' });
         } finally {
             setLoading(false);
         }
@@ -50,11 +50,11 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
         setStatus(null);
 
         if (!file) {
-            setStatus({ type: 'error', msg: 'Please select a file first.' });
+            setStatus({ type: 'error', msg: 'Veuillez d\'abord sélectionner un fichier.' });
             return;
         }
         if (!versionName.trim()) {
-            setStatus({ type: 'error', msg: 'Please enter a version name (e.g. V1, Revised).' });
+            setStatus({ type: 'error', msg: 'Veuillez entrer un nom de version (ex: V1, Révisé).' });
             return;
         }
 
@@ -70,13 +70,13 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
             await axios.post(`${API_BASE}/documents/upload`, formData);
             setFile(null);
             setVersionName('');
-            setStatus({ type: 'success', msg: 'Document uploaded successfully!' });
+            setStatus({ type: 'success', msg: 'Document téléchargé avec succès !' });
             await fetchDocuments(); // refresh list
         } catch (error: any) {
             console.error("Upload error details:", error.response?.data || error.message);
             setStatus({ 
                 type: 'error', 
-                msg: error.response?.data?.detail || 'Upload failed. Check if server is running on :8000' 
+                msg: error.response?.data?.detail || 'L\'envoi a échoué. Vérifiez si le serveur tourne sur :8000' 
             });
         } finally {
             setUploading(false);
@@ -115,7 +115,7 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
                 <div className="flex justify-between items-center p-4 border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
                     <h2 className="text-xl text-[#00ffcc] font-mono font-bold flex items-center gap-2">
                         <FileText className="w-5 h-5" />
-                        DOCUMENTS: {application.company?.name || 'Company'}
+                        DOCUMENTS : {application.company?.name || 'Entreprise'}
                     </h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                         <X className="w-6 h-6" />
@@ -137,25 +137,25 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
 
                     {/* Upload Section */}
                     <form onSubmit={handleUpload} className="bg-gray-800 p-4 rounded-lg border border-gray-700 space-y-4">
-                        <h3 className="text-sm text-gray-400 font-mono">NEW UPLOAD</h3>
+                        <h3 className="text-sm text-gray-400 font-mono">NOUVEAU TÉLÉCHARGEMENT</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">DOCUMENT TYPE</label>
+                                <label className="text-xs text-gray-500 font-mono">TYPE DE DOCUMENT</label>
                                 <select
                                     className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none"
                                     value={docType}
                                     onChange={(e) => setDocType(e.target.value as 'CV' | 'LM' | 'Other')}
                                 >
                                     <option value="CV">CV</option>
-                                    <option value="LM">Cover Letter (LM)</option>
-                                    <option value="Other">Other</option>
+                                    <option value="LM">Lettre de Motivation (LM)</option>
+                                    <option value="Other">Autre</option>
                                 </select>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">VERSION NAME</label>
+                                <label className="text-xs text-gray-500 font-mono">NOM DE LA VERSION</label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. CV_Cyber_V2"
+                                    placeholder="ex: CV_Cyber_V2"
                                     className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none"
                                     value={versionName}
                                     onChange={(e) => setVersionName(e.target.value)}
@@ -164,7 +164,7 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs text-gray-500 font-mono">FILE</label>
+                            <label className="text-xs text-gray-500 font-mono">FICHIER</label>
                             <input
                                 type="file"
                                 className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#00ffcc]/10 file:text-[#00ffcc] hover:file:bg-[#00ffcc]/20"
@@ -174,21 +174,21 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
                         </div>
                         <button
                             type="submit"
-                            disabled={uploading || !file || !versionName}
-                            className="w-full bg-[#00ffcc] text-gray-900 font-bold py-2 px-4 rounded hover:bg-[#00ffcc]/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            disabled={uploading}
+                            className="w-full bg-[#00ffcc] text-gray-900 font-bold py-2 px-4 rounded hover:bg-[#00ffcc]/80 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-[#00ffcc]/20"
                         >
                             {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                            {uploading ? 'UPLOADING...' : 'UPLOAD'}
+                            {uploading ? 'ENVOI EN COURS...' : 'TÉLÉCHARGER MAINTENANT'}
                         </button>
                     </form>
 
                     {/* Document List */}
                     <div className="space-y-3">
-                        <h3 className="text-sm text-gray-400 font-mono border-b border-gray-800 pb-2">ATTACHED DOCUMENTS</h3>
+                        <h3 className="text-sm text-gray-400 font-mono border-b border-gray-800 pb-2">DOCUMENTS JOINTS</h3>
                         {loading ? (
                             <div className="flex justify-center p-4"><Loader2 className="w-6 h-6 text-[#00ffcc] animate-spin" /></div>
                         ) : documents.length === 0 ? (
-                            <p className="text-gray-500 text-sm italic">No documents attached yet.</p>
+                            <p className="text-gray-500 text-sm italic">Aucun document joint pour le moment.</p>
                         ) : (
                             <div className="grid gap-3">
                                 {documents.map(doc => (
@@ -207,16 +207,16 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button
-                                                onClick={() => handleDownload(doc.id, doc.file_path.split(/[/\\]/).pop() || 'download')}
+                                                onClick={() => handleDownload(doc.id, doc.file_path.split(/[/\\]/).pop() || 'téléchargement')}
                                                 className="p-2 text-gray-400 hover:text-[#00ffcc] bg-gray-900 rounded transition-colors"
-                                                title="Download"
+                                                title="Télécharger"
                                             >
                                                 <Download className="w-4 h-4" />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(doc.id)}
                                                 className="p-2 text-gray-400 hover:text-red-400 bg-gray-900 rounded transition-colors opacity-0 group-hover:opacity-100"
-                                                title="Delete"
+                                                title="Supprimer"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>

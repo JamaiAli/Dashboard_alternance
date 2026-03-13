@@ -121,9 +121,9 @@ function App() {
         <div>
           <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3 text-cyber-green">
             <Terminal className="w-8 h-8" />
-            [STI_NEXUS]
+            [NEXUS]
           </h1>
-          <p className="text-sm text-gray-500 mt-2">&gt; SYSTEM STATUS: ONLINE</p>
+          <p className="text-sm text-gray-500 mt-2">&gt; STATUT SYSTÈME : EN LIGNE</p>
         </div>
 
         <TechFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -135,40 +135,40 @@ function App() {
 
           <div className="border border-cyber-cyan/30 p-4 rounded bg-cyber-darker flex-1">
             <div className="flex justify-between items-center mb-4 border-b border-gray-800 pb-2">
-              <h3 className="text-cyber-cyan font-bold text-sm">COMMAND_PALETTE</h3>
+              <h3 className="text-cyber-cyan font-bold text-sm">PALETTE_DE_COMMANDES</h3>
             </div>
             <button
               onClick={() => { setInitialData(undefined); setIsAddOpen(true); }}
               className="w-full text-left px-4 py-3 bg-cyber-green/10 text-cyber-green hover:bg-cyber-green/20 transition-all font-bold border border-cyber-green rounded mb-3 flex justify-between items-center group"
             >
-              <span>+ ADD_APPLICATION</span>
+              <span>+ AJOUTER_CANDIDATURE</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity">_</span>
             </button>
             <button
               onClick={() => setIsImportOpen(true)}
               className="w-full text-left px-4 py-3 bg-cyber-cyan/5 text-gray-400 hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-all border border-gray-800 hover:border-cyber-cyan rounded mb-3"
             >
-              &gt; IMPORT_VIA_URL
+              &gt; IMPORTER_VIA_URL
             </button>
             <button
-              onClick={() => alert("Documents UI is bound per-application in the Kanban Board cards.")}
+              onClick={() => alert("L'interface des documents est accessible par candidature dans les cartes du tableau Kanban.")}
               className="w-full text-left px-4 py-3 bg-cyber-cyan/5 text-gray-400 hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-all border border-gray-800 hover:border-cyber-cyan rounded"
             >
-              &gt; VIEW_DOCUMENTS
+              &gt; VOIR_DOCUMENTS
             </button>
           </div>
         </aside>
 
         <section className="lg:col-span-3 border border-cyber-green/30 p-4 rounded bg-cyber-dark shadow-[0_0_15px_rgba(0,255,65,0.05)] flex flex-col min-h-[600px]">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-sm md:text-base text-cyber-cyan">&gt; current_view : kanban_board.exe</h2>
-            <span className="text-xs text-gray-500">Filtered: {filteredApplications.length} entries</span>
+            <h2 className="text-sm md:text-base text-cyber-cyan">&gt; vue_actuelle : tableau_kanban.exe</h2>
+            <span className="text-xs text-gray-500">Filtré : {filteredApplications.length} entrées</span>
           </div>
 
           <div className="flex-1 overflow-hidden">
             {loading ? (
               <div className="h-full flex items-center justify-center text-cyber-cyan animate-pulse">
-                [LOADING_DATA_MODULE...]
+                [CHARGEMENT_MODULE_DONNÉES...]
               </div>
             ) : (
               <DndContext

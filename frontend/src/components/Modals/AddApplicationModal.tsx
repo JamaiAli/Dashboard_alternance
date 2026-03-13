@@ -103,7 +103,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                 <div className="flex justify-between items-center p-4 border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
                     <h2 className="text-xl text-[#00ffcc] font-mono font-bold flex items-center gap-2">
                         <Plus className="w-5 h-5" />
-                        ADD_APPLICATION.exe
+                        AJOUTER_CANDIDATURE.exe
                     </h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                         <X className="w-6 h-6" />
@@ -114,30 +114,30 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                     {/* COMPANY SECTION */}
                     <div className="space-y-4 bg-gray-800 p-4 rounded-lg border border-gray-700">
                         <div className="flex justify-between items-center mb-2">
-                            <h3 className="text-sm text-gray-400 font-mono">COMPANY DETAILS</h3>
+                            <h3 className="text-sm text-gray-400 font-mono">DÉTAILS DE L'ENTREPRISE</h3>
                             <button
                                 type="button"
                                 onClick={() => setIsNewCompany(!isNewCompany)}
                                 className="text-xs text-[#00ffcc] hover:underline focus:outline-none"
                             >
-                                {isNewCompany ? "Select Existing" : "+ Create New"}
+                                {isNewCompany ? "Sélectionner Existante" : "+ Créer Nouvelle"}
                             </button>
                         </div>
 
                         {isNewCompany ? (
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs text-gray-500 font-mono">COMPANY NAME *</label>
+                                    <label className="text-xs text-gray-500 font-mono">NOM DE L'ENTREPRISE *</label>
                                     <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" required value={newCompanyName} onChange={e => setNewCompanyName(e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs text-gray-500 font-mono">SECTOR</label>
+                                    <label className="text-xs text-gray-500 font-mono">SECTEUR</label>
                                     <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" value={newCompanySector} onChange={e => setNewCompanySector(e.target.value)} />
                                 </div>
                             </div>
                         ) : (
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">SELECT COMPANY *</label>
+                                <label className="text-xs text-gray-500 font-mono">SÉLECTIONNER ENTREPRISE *</label>
                                 <select className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" value={selectedCompanyId} onChange={e => setSelectedCompanyId(e.target.value)}>
                                     {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                 </select>
@@ -147,17 +147,18 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
 
                     {/* APPLICATION SECTION */}
                     <div className="space-y-4 bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <h3 className="text-sm text-gray-400 font-mono mb-2">APPLICATION DETAILS</h3>
+                        <h3 className="text-sm text-gray-400 font-mono mb-2">DÉTAILS DE LA CANDIDATURE</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">STATUS *</label>
+                                <label className="text-xs text-gray-500 font-mono">STATUT *</label>
                                 <select className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={status} onChange={e => setStatus(e.target.value as ApplicationStatus)}>
-                                    <option value="Wishlist">Wishlist</option>
-                                    <option value="Applied">Applied</option>
-                                    <option value="Interview">Interview</option>
-                                    <option value="Technical Test">Technical Test</option>
-                                    <option value="Offer">Offer</option>
-                                    <option value="Rejected">Rejected</option>
+                                    <option value="Wishlist">Liste de souhaits</option>
+                                    <option value="Applied">Postulé</option>
+                                    <option value="Follow-up">Relance</option>
+                                    <option value="Interview">Entretien</option>
+                                    <option value="Technical Test">Test Technique</option>
+                                    <option value="Offer">Offre</option>
+                                    <option value="Rejected">Refusé</option>
                                 </select>
                             </div>
                             <div className="space-y-1">
@@ -168,22 +169,22 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                                 </select>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">SALARY PROPOSED (€)</label>
+                                <label className="text-xs text-gray-500 font-mono">SALAIRE PROPOSÉ (€)</label>
                                 <input type="number" step="1000" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={salary} onChange={e => setSalary(e.target.value)} />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">JOB URL</label>
+                                <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE</label>
                                 <input type="url" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={jobUrl} onChange={e => setJobUrl(e.target.value)} />
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs text-gray-500 font-mono">RAW DESCRIPTION</label>
+                            <label className="text-xs text-gray-500 font-mono">DESCRIPTION BRUTE</label>
                             <textarea rows={4} className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={rawDesc} onChange={e => setRawDesc(e.target.value)} />
                         </div>
                     </div>
 
                     <button type="submit" disabled={loading} className="w-full bg-[#00ffcc] text-gray-900 font-bold py-3 px-4 rounded hover:bg-[#00ffcc]/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'SAVE APPLICATION'}
+                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'ENREGISTRER LA CANDIDATURE'}
                     </button>
                 </form>
             </div>

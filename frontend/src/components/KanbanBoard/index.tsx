@@ -1,6 +1,15 @@
-import { COLUMNS } from '../../types';
-import type { Application } from '../../types';
+import type { Application, ApplicationStatus } from '../../types';
 import { KanbanColumn } from './KanbanColumn';
+
+export const COLUMNS: { id: ApplicationStatus; title: string }[] = [
+    { id: 'Wishlist', title: 'LISTE DE SOUHAITS' },
+    { id: 'Applied', title: 'POSTULÉ' },
+    { id: 'Follow-up', title: 'RELANCE' },
+    { id: 'Interview', title: 'ENTRETIEN' },
+    { id: 'Technical Test', title: 'TEST TECHNIQUE' },
+    { id: 'Offer', title: 'OFFRE' },
+    { id: 'Rejected', title: 'REFUSÉ' },
+];
 
 interface KanbanBoardProps {
     applications: Application[];
