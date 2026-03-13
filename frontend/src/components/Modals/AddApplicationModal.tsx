@@ -6,7 +6,7 @@ import type { ApplicationStatus, ApplicationType } from '../../types';
 interface AddApplicationModalProps {
     onClose: () => void;
     onSuccess: () => void;
-    initialData?: { job_url?: string; raw_description?: string };
+    initialData?: { job_url?: string; raw_description?: string; company_name?: string; contract_type?: string; sector?: string };
 }
 
 interface Company {
@@ -21,13 +21,13 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
     const [companies, setCompanies] = useState<Company[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const [isNewCompany, setIsNewCompany] = useState(false);
+    const [isNewCompany, setIsNewCompany] = useState(!!initialData?.company_name);
     const [selectedCompanyId, setSelectedCompanyId] = useState('');
-    const [newCompanyName, setNewCompanyName] = useState('');
-    const [newCompanySector, setNewCompanySector] = useState('');
+    const [newCompanyName, setNewCompanyName] = useState(initialData?.company_name || '');
+    const [newCompanySector, setNewCompanySector] = useState(initialData?.sector || '');
 
     const [status, setStatus] = useState<ApplicationStatus>('Wishlist');
-    const [type, setType] = useState<ApplicationType>('Alternance');
+    const [type, setType] = useState<ApplicationType>((initialData?.contract_type as ApplicationType) || 'Alternance');
     const [salary, setSalary] = useState('');
     const [jobUrl, setJobUrl] = useState(initialData?.job_url || '');
     const [rawDesc, setRawDesc] = useState(initialData?.raw_description || '');

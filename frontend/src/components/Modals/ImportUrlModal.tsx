@@ -4,7 +4,13 @@ import { Loader2, X, Globe } from 'lucide-react';
 
 interface ImportUrlModalProps {
     onClose: () => void;
-    onSuccess: (data: { job_url: string; raw_description: string }) => void;
+    onSuccess: (data: {
+        job_url: string;
+        raw_description: string;
+        company_name?: string;
+        contract_type?: string;
+        sector?: string;
+    }) => void;
 }
 
 export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
@@ -20,7 +26,13 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
         setLoading(true);
         try {
             const res = await axios.post('http://localhost:8000/api/v1/scraper/', { url });
-            onSuccess({ job_url: url, raw_description: res.data.raw_text });
+            onSuccess({
+                job_url: url,
+                raw_description: res.data.raw_text,
+                company_name: res.data.company_name || undefined,
+                contract_type: res.data.contract_type || undefined,
+                sector: res.data.sector || undefined,
+            });
         } catch (err: unknown) {
             console.error("Scraping error:", err);
             if (axios.isAxiosError(err)) {
