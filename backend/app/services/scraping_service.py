@@ -111,7 +111,14 @@ class ScrapingService:
                     for item in expanded:
                         if item.get("@type") == "JobPosting":
                             job_title = job_title or item.get("title")
-                            sector = sector or item.get("industry")
+                            
+                            # Handle sector as string or list
+                            raw_sector = item.get("industry")
+                            if isinstance(raw_sector, list):
+                                sector = sector or ", ".join(str(s) for s in raw_sector)
+                            elif raw_sector:
+                                sector = sector or str(raw_sector)
+                                
                             ld_description = ld_description or item.get("description")
 
                             hiring_org = item.get("hiringOrganization")
@@ -257,7 +264,13 @@ class ScrapingService:
                     'recommend', 'subscribe', 'newsletter', 'signup', 'login',
                     'advert', 'sponsor']
 
-        for element in soup_copy.find_all(True):
+        # Get all tags and convert to list to avoid iteration issues during decomposition
+        all_tags = list(soup_copy.find_all(True))
+        for element in all_tags:
+            # Skip if element is None or already decomposed/detached
+            if element is None or not hasattr(element, 'get') or element.parent is None:
+                continue
+                
             el_class = ' '.join(element.get('class', []))
             el_id = element.get('id', '')
             combined = f"{el_class} {el_id}".lower()
