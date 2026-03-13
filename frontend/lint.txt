@@ -1,0 +1,15 @@
+﻿
+C:\Users\jamai\OneDrive\Desktop\outil_suivi_alternance\frontend\src\App.tsx
+  87:11  error  'overId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\jamai\OneDrive\Desktop\outil_suivi_alternance\frontend\src\components\Documents\DocumentManager.tsx
+   31:8    warning  React Hook useEffect has a missing dependency: 'fetchDocuments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  177:144  error    Unnecessary escape character: \/                                                                                   no-useless-escape
+  182:109  error    Unnecessary escape character: \/                                                                                   no-useless-escape
+
+C:\Users\jamai\OneDrive\Desktop\outil_suivi_alternance\frontend\src\components\KanbanBoard\index.tsx
+   2:28  error  'ApplicationStatus' is defined but never used  @typescript-eslint/no-unused-vars
+  10:45  error  'activeId' is defined but never used           @typescript-eslint/no-unused-vars
+
+Ô£û 6 problems (5 errors, 1 warning)
+
