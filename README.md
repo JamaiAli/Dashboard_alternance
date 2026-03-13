@@ -1,4 +1,4 @@
-# 🚀 Dashboard Alternance — STI_NEXUS
+# 🚀 Dashboard Alternance — NEXUS
 
 > **Dashboard de suivi de candidatures d'alternance** — Interface Kanban cyberpunk pour tracker, organiser et analyser vos candidatures.
 
@@ -12,7 +12,7 @@
 
 ## 📖 Description
 
-**STI_NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
+**NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
 
 - Un **tableau Kanban interactif** avec drag & drop pour déplacer vos candidatures entre les étapes (Wishlist → Applied → Interview → Technical Test → Offer / Rejected).
 - Un **panneau d'analytics** affichant les statistiques en temps réel.
