@@ -1,17 +1,9 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from uuid import UUID
-
-from app.database import get_db
-from app.models.document import Document
-from app.schemas.document import DocumentCreate, DocumentResponse, DocumentUpdate
-
 import os
 import shutil
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from uuid import UUID
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -35,13 +27,21 @@ async def upload_document(
     # Retrieve file extension
     file_extension = os.path.splitext(file.filename)[1]
     
+    # Sanitize version name for filename (remove spaces and special chars)
+    safe_version = "".join(c for c in version_name if c.isalnum() or c in ('-', '_')).strip()
+    if not safe_version:
+        safe_version = "v1"
+
     # Generate unique filename to avoid overriding
-    unique_filename = f"{application_id}_{type.value}_{version_name}{file_extension}"
+    unique_filename = f"{application_id}_{type.value}_{safe_version}{file_extension}"
     file_path = os.path.join(UPLOAD_DIR, unique_filename)
 
     # Save to Local File System
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
 
     # Create DB Record
     db_document = Document(

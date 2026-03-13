@@ -25,9 +25,9 @@ class Application(Base):
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
     date_sent = Column(DateTime(timezone=True), default=datetime.now(timezone.utc), nullable=True)
     last_contact_date = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
-    status = Column(Enum(ApplicationStatus), default=ApplicationStatus.WISHLIST)
+    status = Column(Enum(ApplicationStatus, native_enum=False), default=ApplicationStatus.WISHLIST)
     salary_proposed = Column(Float, nullable=True)
-    type = Column(Enum(ApplicationType), default=ApplicationType.ALTERNANCE)
+    type = Column(Enum(ApplicationType, native_enum=False), default=ApplicationType.ALTERNANCE)
     job_url = Column(String, nullable=True)
     raw_description = Column(Text, nullable=True)
 

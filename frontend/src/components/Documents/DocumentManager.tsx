@@ -19,6 +19,7 @@ interface AppDocument {
 export function DocumentManager({ application, onClose }: DocumentManagerProps) {
     const [documents, setDocuments] = useState<AppDocument[]>([]);
     const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<{ type: 'error' | 'success', msg: string } | null>(null);
     const [uploading, setUploading] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [docType, setDocType] = useState<'CV' | 'LM' | 'Other'>('CV');
@@ -28,11 +29,13 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
 
     const fetchDocuments = useCallback(async () => {
         setLoading(true);
+        setStatus(null);
         try {
             const res = await axios.get(`${API_BASE}/documents/application/${application.id}`);
             setDocuments(res.data);
         } catch (error) {
             console.error("Error fetching documents:", error);
+            setStatus({ type: 'error', msg: 'Failed to load documents list.' });
         } finally {
             setLoading(false);
         }
@@ -44,24 +47,37 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
 
     const handleUpload = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!file || !versionName) return;
+        setStatus(null);
+
+        if (!file) {
+            setStatus({ type: 'error', msg: 'Please select a file first.' });
+            return;
+        }
+        if (!versionName.trim()) {
+            setStatus({ type: 'error', msg: 'Please enter a version name (e.g. V1, Revised).' });
+            return;
+        }
 
         setUploading(true);
         const formData = new FormData();
         formData.append('application_id', application.id);
         formData.append('type', docType);
-        formData.append('version_name', versionName);
+        formData.append('version_name', versionName.trim());
         formData.append('file', file);
 
         try {
-            await axios.post(`${API_BASE}/documents/upload`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            console.log("Starting upload to:", `${API_BASE}/documents/upload`);
+            await axios.post(`${API_BASE}/documents/upload`, formData);
             setFile(null);
             setVersionName('');
+            setStatus({ type: 'success', msg: 'Document uploaded successfully!' });
             await fetchDocuments(); // refresh list
-        } catch (error) {
-            console.error("Error uploading document:", error);
+        } catch (error: any) {
+            console.error("Upload error details:", error.response?.data || error.message);
+            setStatus({ 
+                type: 'error', 
+                msg: error.response?.data?.detail || 'Upload failed. Check if server is running on :8000' 
+            });
         } finally {
             setUploading(false);
         }
@@ -107,6 +123,18 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
                 </div>
 
                 <div className="p-6 space-y-6">
+                    {/* Status Message */}
+                    {status && (
+                        <div className={`p-3 rounded-md text-sm font-mono flex items-center gap-2 ${
+                            status.type === 'success' 
+                                ? 'bg-[#00ffcc]/10 text-[#00ffcc] border border-[#00ffcc]/30' 
+                                : 'bg-red-500/10 text-red-500 border border-red-500/30'
+                        }`}>
+                            {status.type === 'success' ? '✓ ' : '⚠ '}
+                            {status.msg}
+                        </div>
+                    )}
+
                     {/* Upload Section */}
                     <form onSubmit={handleUpload} className="bg-gray-800 p-4 rounded-lg border border-gray-700 space-y-4">
                         <h3 className="text-sm text-gray-400 font-mono">NEW UPLOAD</h3>

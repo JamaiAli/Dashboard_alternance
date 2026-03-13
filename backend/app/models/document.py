@@ -15,7 +15,7 @@ class Document(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     application_id = Column(UUID(as_uuid=True), ForeignKey("applications.id", ondelete="CASCADE"), nullable=False)
-    type = Column(Enum(DocumentType), nullable=False)
+    type = Column(Enum(DocumentType, native_enum=False), nullable=False)
     version_name = Column(String, nullable=False)
     file_path = Column(String, nullable=False)
 
