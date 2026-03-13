@@ -6,6 +6,7 @@ import axios from 'axios';
 import { differenceInDays } from 'date-fns';
 import { Paperclip, Trash2 } from 'lucide-react';
 import { DocumentManager } from '../Documents/DocumentManager';
+import { ApplicationDetailModal } from '../Modals/ApplicationDetailModal';
 
 interface ApplicationCardProps {
     application: Application;
@@ -14,6 +15,7 @@ interface ApplicationCardProps {
 
 export function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
     const [isDocumentManagerOpen, setIsDocumentManagerOpen] = useState(false);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
 
     const {
         attributes,
@@ -56,6 +58,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                 style={style}
                 {...attributes}
                 {...listeners}
+                onDoubleClick={(e) => { e.stopPropagation(); setIsDetailOpen(true); }}
                 className={`bg-cyber-darker border border-gray-700 p-3 rounded mb-3 cursor-grab hover:border-cyber-cyan transition-colors ${isDragging ? 'opacity-50 ring-2 ring-cyber-cyan z-50' : ''
                     } ${inactiveClass}`}
             >
@@ -100,6 +103,13 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                 <DocumentManager
                     application={application}
                     onClose={() => setIsDocumentManagerOpen(false)}
+                />
+            )}
+
+            {isDetailOpen && (
+                <ApplicationDetailModal
+                    application={application}
+                    onClose={() => setIsDetailOpen(false)}
                 />
             )}
         </>
