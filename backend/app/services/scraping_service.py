@@ -92,9 +92,23 @@ class ScrapingService:
 
             for script_tag in soup.find_all("script", type="application/ld+json"):
                 try:
+                    if not script_tag.string:
+                        continue
                     ld_data = json.loads(script_tag.string)
                     items = ld_data if isinstance(ld_data, list) else [ld_data]
+                    # Handle @graph wrapping
+                    expanded = []
                     for item in items:
+                        if not isinstance(item, dict):
+                            continue
+                        if "@graph" in item:
+                            graph = item["@graph"]
+                            if isinstance(graph, list):
+                                expanded.extend(g for g in graph if isinstance(g, dict))
+                        else:
+                            expanded.append(item)
+
+                    for item in expanded:
                         if item.get("@type") == "JobPosting":
                             job_title = job_title or item.get("title")
                             sector = sector or item.get("industry")
@@ -109,7 +123,7 @@ class ScrapingService:
                             # Location
                             job_location = item.get("jobLocation")
                             if isinstance(job_location, dict):
-                                address = job_location.get("address", {})
+                                address = job_location.get("address")
                                 if isinstance(address, dict):
                                     parts = filter(None, [
                                         address.get("streetAddress"),
@@ -122,7 +136,7 @@ class ScrapingService:
                             # Salary
                             base_salary = item.get("baseSalary")
                             if isinstance(base_salary, dict):
-                                value = base_salary.get("value", {})
+                                value = base_salary.get("value")
                                 if isinstance(value, dict):
                                     min_val = value.get("minValue")
                                     max_val = value.get("maxValue")
