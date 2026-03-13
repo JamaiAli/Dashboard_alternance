@@ -55,11 +55,24 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
 
             // 1. Create company if new
             if (isNewCompany) {
-                const compRes = await axios.post(`${API_BASE}/companies/`, {
-                    name: newCompanyName,
-                    sector: newCompanySector || null,
-                });
-                finalCompanyId = compRes.data.id;
+                try {
+                    const compRes = await axios.post(`${API_BASE}/companies/`, {
+                        name: newCompanyName,
+                        sector: newCompanySector || null,
+                    });
+                    finalCompanyId = compRes.data.id;
+                } catch {
+                    // Company might already exist (unique name constraint), try to find it
+                    const existingRes = await axios.get(`${API_BASE}/companies/`);
+                    const existing = existingRes.data.find(
+                        (c: { id: string; name: string }) => c.name.toLowerCase() === newCompanyName.toLowerCase()
+                    );
+                    if (existing) {
+                        finalCompanyId = existing.id;
+                    } else {
+                        throw new Error("Failed to create or find company");
+                    }
+                }
             }
 
             // 2. Create Application
