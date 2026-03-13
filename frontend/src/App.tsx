@@ -31,7 +31,7 @@ function App() {
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const [initialData, setInitialData] = useState<{ job_url?: string; raw_description?: string; company_name?: string; contract_type?: string; sector?: string } | undefined>();
+  const [initialData, setInitialData] = useState<{ job_url?: string; raw_description?: string; company_name?: string; contract_type?: string; sector?: string; location?: string; salary?: string; description?: string; benefits?: string; job_title?: string } | undefined>();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -109,7 +109,7 @@ function App() {
 
   const activeApplication = activeId ? applications.find(app => app.id === activeId) : null;
 
-  const handleImportSuccess = (data: { job_url: string; raw_description: string; company_name?: string; contract_type?: string; sector?: string }) => {
+  const handleImportSuccess = (data: { job_url: string; raw_description: string; company_name?: string; contract_type?: string; sector?: string; location?: string; salary?: string; description?: string; benefits?: string; job_title?: string }) => {
     setIsImportOpen(false);
     setInitialData(data);
     setIsAddOpen(true);

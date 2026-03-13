@@ -10,6 +10,11 @@ interface ImportUrlModalProps {
         company_name?: string;
         contract_type?: string;
         sector?: string;
+        location?: string;
+        salary?: string;
+        description?: string;
+        benefits?: string;
+        job_title?: string;
     }) => void;
 }
 
@@ -32,6 +37,11 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
                 company_name: res.data.company_name || undefined,
                 contract_type: res.data.contract_type || undefined,
                 sector: res.data.sector || undefined,
+                location: res.data.location || undefined,
+                salary: res.data.salary || undefined,
+                description: res.data.description || undefined,
+                benefits: res.data.benefits || undefined,
+                job_title: res.data.job_title || undefined,
             });
         } catch (err: unknown) {
             console.error("Scraping error:", err);

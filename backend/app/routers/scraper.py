@@ -17,6 +17,10 @@ class ScrapeResponse(BaseModel):
     job_title: Optional[str] = None
     contract_type: Optional[str] = None
     sector: Optional[str] = None
+    location: Optional[str] = None
+    salary: Optional[str] = None
+    description: Optional[str] = None
+    benefits: Optional[str] = None
 
 
 @router.post("/", response_model=ScrapeResponse)
@@ -33,4 +37,8 @@ async def scrape_job_offer(request: ScrapeRequest):
         job_title=data.get("job_title"),
         contract_type=data.get("contract_type"),
         sector=data.get("sector"),
+        location=data.get("location"),
+        salary=data.get("salary"),
+        description=data.get("description"),
+        benefits=data.get("benefits"),
     )

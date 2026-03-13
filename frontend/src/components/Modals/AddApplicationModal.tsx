@@ -6,7 +6,7 @@ import type { ApplicationStatus, ApplicationType } from '../../types';
 interface AddApplicationModalProps {
     onClose: () => void;
     onSuccess: () => void;
-    initialData?: { job_url?: string; raw_description?: string; company_name?: string; contract_type?: string; sector?: string };
+    initialData?: { job_url?: string; raw_description?: string; company_name?: string; contract_type?: string; sector?: string; location?: string; salary?: string; description?: string; benefits?: string; job_title?: string };
 }
 
 interface Company {
