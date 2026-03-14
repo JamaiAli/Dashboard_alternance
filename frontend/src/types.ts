@@ -18,7 +18,7 @@ export interface Application {
     date_sent: string | null;
     last_contact_date: string;
     status: ApplicationStatus;
-    salary_proposed: number | null;
+    salary_proposed: string | null;
     type: ApplicationType;
     job_url: string | null;
     raw_description: string | null;

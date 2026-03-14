@@ -28,7 +28,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
 
     const [status, setStatus] = useState<ApplicationStatus>('Wishlist');
     const [type, setType] = useState<ApplicationType>((initialData?.contract_type as ApplicationType) || 'Alternance');
-    const [salary, setSalary] = useState('');
+    const [salary, setSalary] = useState(initialData?.salary || '');
     const [jobUrl, setJobUrl] = useState(initialData?.job_url || '');
     const [rawDesc, setRawDesc] = useState(initialData?.raw_description || '');
 
@@ -80,7 +80,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                 company_id: finalCompanyId,
                 status,
                 type,
-                salary_proposed: salary ? parseFloat(salary) : null,
+                salary_proposed: salary || null,
                 job_url: jobUrl || null,
                 raw_description: rawDesc || null,
                 date_sent: new Date().toISOString(),
@@ -170,7 +170,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500 font-mono">SALAIRE PROPOSÉ (€)</label>
-                                <input type="number" step="1000" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={salary} onChange={e => setSalary(e.target.value)} />
+                                <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={salary} onChange={e => setSalary(e.target.value)} />
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE</label>

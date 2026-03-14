@@ -27,7 +27,7 @@ class Application(Base):
     date_sent = Column(DateTime(timezone=True), default=datetime.now(timezone.utc), nullable=True)
     last_contact_date = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
     status = Column(Enum(ApplicationStatus, native_enum=False), default=ApplicationStatus.WISHLIST)
-    salary_proposed = Column(Float, nullable=True)
+    salary_proposed = Column(String, nullable=True)
     type = Column(Enum(ApplicationType, native_enum=False), default=ApplicationType.ALTERNANCE)
     job_url = Column(String, nullable=True)
     raw_description = Column(Text, nullable=True)

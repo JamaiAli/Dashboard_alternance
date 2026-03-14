@@ -10,7 +10,7 @@ class ApplicationBase(BaseModel):
     date_sent: Optional[datetime] = None
     last_contact_date: Optional[datetime] = None
     status: Optional[ApplicationStatus] = ApplicationStatus.WISHLIST
-    salary_proposed: Optional[float] = None
+    salary_proposed: Optional[str] = None
     type: Optional[ApplicationType] = ApplicationType.ALTERNANCE
     job_url: Optional[str] = None
     raw_description: Optional[str] = None

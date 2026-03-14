@@ -85,7 +85,7 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
                                 SALAIRE PROPOSÉ
                             </div>
                             <p className="text-sm text-gray-200">
-                                {application.salary_proposed ? `${application.salary_proposed.toLocaleString()} €` : '—'}
+                                {application.salary_proposed ? `${application.salary_proposed}${application.salary_proposed.includes('€') ? '' : ' €'}` : '—'}
                             </p>
                         </div>
 

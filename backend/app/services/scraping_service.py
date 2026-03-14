@@ -491,15 +491,28 @@ class ScrapingService:
     def _extract_salary_from_text(text: str) -> Optional[str]:
         """Try to find salary info from text."""
         patterns = [
+            # Range with unit: "35 000 - 45 000 € / an"
             r'(\d[\d\s,\.]+\s*[-–à]\s*\d[\d\s,\.]+\s*€\s*/\s*(?:mois|an|heure|jour))',
+            # Single with unit: "2000 € / mois"
             r'(\d[\d\s,\.]+\s*€\s*/\s*(?:mois|an|heure|jour))',
+            # Range with k€: "35 - 45 k€"
             r'(\d[\d\s,\.]+\s*[-–à]\s*\d[\d\s,\.]+\s*(?:k€|K€|euros?)(?:\s*/\s*(?:mois|an))?)',
+            # Single with k€: "45k€"
+            r'(\d[\d\s,\.]+\s*(?:k€|K€|euros?)(?:\s*/\s*(?:mois|an))?)',
+            # Just range: "35000 - 45000" (if preceded by salary related keywords)
+            r'(?:salaire|rémunération|gratification)\s*(?::|—)?\s*(\d[\d\s,\.]+\s*[-–à]\s*\d[\d\s,\.]+)',
         ]
 
         for pattern in patterns:
-            match = re.search(pattern, text)
+            match = re.search(pattern, text, re.IGNORECASE)
             if match:
-                return match.group(1).strip()
+                res = match.group(1).strip()
+                # If the match was from the last pattern, it might not have the currency
+                if '€' not in res.lower() and 'euro' not in res.lower():
+                    # We only return it if it looks like a salary (numeric)
+                    if any(c.isdigit() for c in res):
+                        return f"{res} €"
+                return res
 
         return None
 
