@@ -21,6 +21,10 @@
 - Un **import par URL** avec scraping automatique de la fiche de poste.
 - Un **filtre de recherche** par nom d'entreprise ou technologie.
 
+## Démonstration Vidéo
+
+Vous pouvez visionner une démonstration complète de l'outil à l'adresse suivante : [Lien vers la vidéo](https://youtu.be/CnKO8ISfkqs)
+
 ---
 
 ## Stack Technique
