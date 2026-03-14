@@ -1,4 +1,4 @@
-# 🚀 Dashboard Alternance — NEXUS
+# Dashboard Alternance — NEXUS
 
 > **Dashboard de suivi de candidatures d'alternance** — Interface Kanban cyberpunk pour tracker, organiser et analyser vos candidatures.
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 📖 Description
+## Description
 
 **NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
 
@@ -23,7 +23,7 @@
 
 ---
 
-## 🛠️ Stack Technique
+## Stack Technique
 
 | Couche | Technologies |
 |---|---|
@@ -35,7 +35,7 @@
 
 ---
 
-## 📁 Organisation du Projet
+## Organisation du Projet
 
 ```
 Dashboard_alternance/
@@ -80,7 +80,7 @@ Dashboard_alternance/
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Vue d'ensemble
 
@@ -196,7 +196,7 @@ sequenceDiagram
 
 ---
 
-## 🚀 Installation et Lancement
+## Installation et Lancement
 
 ### Prérequis
 
@@ -264,7 +264,7 @@ Le frontend est accessible sur **http://localhost:5173**.
 
 ---
 
-## 🧪 Tester l'Application
+## Tester l'Application
 
 ### Interface Web
 
@@ -300,7 +300,7 @@ Accédez à **http://localhost:8000/docs** pour tester chaque endpoint REST dire
 
 ---
 
-## ⚙️ Variables d'Environnement
+## Variables d'Environnement
 
 Le fichier `backend/.env` contient :
 
@@ -312,7 +312,7 @@ Ces valeurs correspondent à la configuration du `docker-compose.yml`.
 
 ---
 
-## 🐛 Résolution de Problèmes
+## Résolution de Problèmes
 
 | Problème | Solution |
 |---|---|
@@ -325,7 +325,7 @@ Ces valeurs correspondent à la configuration du `docker-compose.yml`.
 
 ---
 
-## 📄 Licence
+## Licence
 
 Projet développé dans le cadre d'une recherche d'alternance.
 
