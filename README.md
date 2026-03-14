@@ -1,6 +1,6 @@
-# Dashboard Alternance — NEXUS
+# 🚀 Dashboard Alternance — NEXUS
 
-> **Système de suivi de candidatures** — Interface de gestion centralisée pour l'organisation et l'analyse de vos candidatures en alternance ou stage.
+> **Dashboard de suivi de candidatures d'alternance** — Interface Kanban cyberpunk pour tracker, organiser et analyser vos candidatures.
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?logo=fastapi)
@@ -10,140 +10,327 @@
 
 ---
 
-## Description
+## 📖 Description
 
-**NEXUS** est une solution logicielle conçue pour optimiser le processus de recherche d'alternance ou de stage. L'outil permet de centraliser l'ensemble des démarches et d'en visualiser l'avancement via une interface moderne et fonctionnelle.
+**NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
 
-Principales fonctionnalités :
-- **Tableau Kanban** : Gestion visuelle des candidatures avec support du glisser-déposer (SOUHAITS → POSTULÉ → RELANCE → ENTRETIEN → TEST TECHNIQUE → OFFRE / REFUSÉ).
-- **Analyse de Performance** : Indicateurs clés et statistiques de réussite en temps réel.
-- **Gestion Documentaire** : Centralisation des CV et lettres de motivation associés à chaque dossier.
-- **Suivi des Échanges** : Module de notes pour l'historique des interactions avec les recruteurs.
-- **Automatisation** : Importation de fiches de poste via URL avec extraction automatique des données.
-- **Recherche Avancée** : Filtrage multicritère par entreprise ou stack technologique.
+- Un **tableau Kanban interactif** avec drag & drop pour déplacer vos candidatures entre les étapes (SOUHAITS → POSTULÉ → RELANCE → ENTRETIEN → TEST TECHNIQUE → OFFRE / REFUSÉ).
+- Un **panneau d'analytics** affichant les statistiques en temps réel.
+- Un **gestionnaire de documents** (CV, lettres de motivation) rattachés à chaque candidature.
+- Un **système de notes** pour consigner les échanges et remarques.
+- Un **import par URL** avec scraping automatique de la fiche de poste.
+- Un **filtre de recherche** par nom d'entreprise ou technologie.
 
 ---
 
-## Architecture Technique
+## 🛠️ Stack Technique
 
-| Composant | Technologie |
+| Couche | Technologies |
 |---|---|
-| **Interface Utilisateur** | React 19, TypeScript, Vite, Tailwind CSS 4, dnd-kit |
-| **API Backend** | Python 3.11+, FastAPI, SQLAlchemy (Asynchrone), Alembic, Pydantic |
-| **Base de Données** | PostgreSQL 15 |
-| **Services** | BeautifulSoup4, Requests (Collecte de données) |
-| **Conteneurisation** | Docker Compose |
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS 4, dnd-kit, Lucide Icons, Axios |
+| **Backend** | Python 3.11+, FastAPI, SQLAlchemy (async), Alembic, Pydantic |
+| **Base de données** | PostgreSQL 15 (via Docker) |
+| **Scraping** | BeautifulSoup4, Requests |
+| **Infrastructure** | Docker Compose |
 
 ---
 
-## Structure du Projet
+## 📁 Organisation du Projet
 
 ```
 Dashboard_alternance/
-├── backend/                    # Serveur API FastAPI
+├── backend/                    # API REST FastAPI
 │   ├── app/
-│   │   ├── core/               # Configuration et variables d'environnement
-│   │   ├── models/             # Modèles de données SQLAlchemy
-│   │   ├── routers/            # Contrôleurs API
-│   │   ├── schemas/            # Modèles de validation Pydantic
-│   │   ├── services/           # Services métier et scraping
-│   │   ├── database.py         # Gestion de la session de base de données
-│   │   └── main.py             # Point d'entrée de l'application
-│   ├── alembic/                # Scripts de migration
-│   └── uploads/                # Stockage des documents
-├── frontend/                   # Client React
+│   │   ├── core/               # Configuration (settings, .env)
+│   │   ├── models/             # Modèles SQLAlchemy
+│   │   │   ├── application.py  # Modèle de candidature
+│   │   │   ├── company.py      # Modèle d'entreprise
+│   │   │   ├── document.py     # Modèle de document
+│   │   │   └── note.py         # Modèle de note
+│   │   ├── routers/            # Endpoints API
+│   │   │   ├── applications.py # CRUD candidatures
+│   │   │   ├── companies.py    # CRUD entreprises
+│   │   │   ├── documents.py    # Upload / gestion documents
+│   │   │   ├── notes.py        # CRUD notes
+│   │   │   └── scraper.py      # Endpoint de scraping URL
+│   │   ├── schemas/            # Schémas Pydantic (validation)
+│   │   ├── services/           # Logique métier
+│   │   │   └── scraping_service.py
+│   │   ├── database.py         # Configuration async SQLAlchemy
+│   │   └── main.py             # Point d'entrée FastAPI
+│   ├── alembic/                # Migrations de base de données
+│   ├── uploads/                # Stockage des fichiers uploadés
+│   └── .env                    # Variables d'environnement
+├── frontend/                   # Application React
 │   ├── src/
-│   │   ├── components/         # Composants d'interface (Kanban, Modales, etc.)
-│   │   ├── App.tsx             # Composant racine
-│   │   ├── types.ts            # Définitions de types globaux
-│   │   └── main.tsx            # Initialisation React
-├── docker-compose.yml          # Infrastructure Docker
-└── README.md                   # Documentation projet
+│   │   ├── components/
+│   │   │   ├── KanbanBoard/    # Tableau Kanban (colonnes + cartes)
+│   │   │   ├── Analytics/      # Widget de statistiques
+│   │   │   ├── Documents/      # Gestionnaire de documents
+│   │   │   ├── Modals/         # Modales (ajout, import URL)
+│   │   │   └── SearchFilter/   # Filtre par tech / entreprise
+│   │   ├── App.tsx             # Composant principal
+│   │   ├── types.ts            # Types TypeScript
+│   │   └── main.tsx            # Point d'entrée React
+│   ├── package.json
+│   └── vite.config.ts
+├── docker-compose.yml          # Configuration Docker (PostgreSQL)
+└── README.md
 ```
 
 ---
 
-## Installation et Déploiement
+## 🏗️ Architecture
+
+### Vue d'ensemble
+
+```mermaid
+graph TB
+    subgraph Client["🖥️ Frontend — React / Vite"]
+        A["App.tsx"] --> B["KanbanBoard"]
+        A --> C["AnalyticsWidget"]
+        A --> D["SearchFilter"]
+        A --> E["AddApplicationModal"]
+        A --> F["ImportUrlModal"]
+        B --> G["KanbanColumn"]
+        G --> H["ApplicationCard"]
+        H --> I["DocumentManager"]
+    end
+
+    subgraph API["⚙️ Backend — FastAPI"]
+        J["main.py"] --> K["/api/v1/applications"]
+        J --> L["/api/v1/companies"]
+        J --> M["/api/v1/documents"]
+        J --> N["/api/v1/notes"]
+        J --> O["/api/v1/scraper"]
+        O --> P["ScrapingService"]
+    end
+
+    subgraph DB["🗄️ PostgreSQL"]
+        Q["companies"]
+        R["applications"]
+        S["documents"]
+        T["notes"]
+    end
+
+    Client -- "HTTP / REST (Axios)" --> API
+    API -- "SQLAlchemy Async" --> DB
+    R -- "FK company_id" --> Q
+    S -- "FK application_id" --> R
+    T -- "FK application_id" --> R
+```
+
+### Modèle de données
+
+```mermaid
+erDiagram
+    COMPANY ||--o{ APPLICATION : "possède"
+    APPLICATION ||--o{ DOCUMENT : "contient"
+    APPLICATION ||--o{ NOTE : "contient"
+
+    COMPANY {
+        uuid id PK
+        string name
+        string sector
+        string[] tech_stack
+    }
+
+    APPLICATION {
+        uuid id PK
+        uuid company_id FK
+        datetime date_sent
+        datetime last_contact_date
+        enum status
+        enum type
+        float salary_proposed
+        string job_url
+        text raw_description
+    }
+
+    DOCUMENT {
+        uuid id PK
+        uuid application_id FK
+        string filename
+        string filepath
+        datetime uploaded_at
+    }
+
+    NOTE {
+        uuid id PK
+        uuid application_id FK
+        text content
+        datetime created_at
+    }
+```
+
+### Flux utilisateur
+
+```mermaid
+sequenceDiagram
+    participant U as Utilisateur
+    participant F as Frontend React
+    participant B as Backend FastAPI
+    participant D as PostgreSQL
+    participant W as Web (URL)
+
+    U->>F: Ouvre le dashboard
+    F->>B: GET /api/v1/applications
+    B->>D: SELECT applications + companies
+    D-->>B: Données
+    B-->>F: JSON applications
+    F-->>U: Affiche le Kanban Board
+
+    U->>F: Drag & Drop une carte
+    F->>B: PUT /api/v1/applications/{id}
+    B->>D: UPDATE status
+    D-->>B: OK
+    B-->>F: 200
+
+    U->>F: Import via URL
+    F->>B: POST /api/v1/scraper/extract
+    B->>W: GET page web
+    W-->>B: HTML
+    B-->>F: Texte extrait
+    F-->>U: Pré-remplit le formulaire
+```
+
+---
+
+## 🚀 Installation et Lancement
 
 ### Prérequis
-- Docker Desktop
-- Python 3.11+
-- Node.js 18+
-- Client Git
 
-### 1. Clonage du dépôt
+- **Docker Desktop** installé et démarré
+- **Python 3.11+** avec `pip`
+- **Node.js 18+** avec `npm`
+- **Git**
+
+### 1. Cloner le dépôt
+
 ```bash
 git clone https://github.com/JamaiAli/Dashboard_alternance.git
 cd Dashboard_alternance
 ```
 
-### 2. Initialisation de la base de données
+### 2. Lancer la base de données
+
 ```bash
 docker-compose up -d
 ```
 
-### 3. Configuration du Backend
+Vérifier que PostgreSQL tourne :
+
 ```bash
+docker ps
+# Vous devez voir un conteneur postgres:15 actif sur le port 5432
+```
+
+### 3. Configurer et lancer le Backend
+
+```bash
+# Créer un environnement virtuel
 python -m venv venv
-# Windows
+
+# Activer l'environnement (PowerShell Windows)
 .\venv\Scripts\Activate.ps1
-# Unix/macOS
+
+# Ou sur Linux/Mac
 # source venv/bin/activate
 
-pip install -r requirements.txt # Ou installation manuelle des dépendances listées dans le code
+# Installer les dépendances
+pip install fastapi uvicorn sqlalchemy[asyncio] asyncpg alembic python-dotenv pydantic-settings requests beautifulsoup4 python-multipart aiofiles
+
+# Lancer les migrations
 cd backend
 alembic upgrade head
+
+# Démarrer le serveur
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 4. Configuration du Frontend
-Dans un terminal distinct :
+Le backend est accessible sur **http://localhost:8000**.
+
+### 4. Lancer le Frontend
+
+Dans un **nouveau terminal** :
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-L'application est accessible à l'adresse suivante : **http://localhost:5173**
+Le frontend est accessible sur **http://localhost:5173**.
 
 ---
 
-## Utilisation
+## 🧪 Tester l'Application
 
-### Interface Utilisateur
-- **Création** : Utilisation du bouton `+ AJOUTER_CANDIDATURE` pour une entrée manuelle.
-- **Importation** : Utilisation de `> IMPORTER_VIA_URL` pour l'extraction automatique.
-- **Gestion** : Suivi des étapes par déplacement des cartes dans le tableau Kanban.
-- **Documents** : Gestion des pièces jointes directement sur le détail de la candidature.
+### Interface Web
 
-### Documentation API
-Le backend génère automatiquement une documentation interactive (Swagger UI) accessible sur : **http://localhost:8000/docs**
+Ouvrez **http://localhost:5173** pour accéder au dashboard Kanban.
+
+| Action | Comment |
+|---|---|
+| Ajouter une candidature | Cliquer sur `+ AJOUTER_CANDIDATURE` |
+| Importer via URL | Cliquer sur `> IMPORTER_VIA_URL` |
+| Déplacer une candidature | Drag & drop entre les colonnes |
+| Ajouter une note | Cliquer sur une carte → section notes |
+| Uploader un document | Cliquer sur une carte → section documents |
+| Supprimer une candidature | Bouton supprimer sur la carte |
+| Filtrer | Taper dans la barre de recherche |
+
+### API Swagger
+
+Accédez à **http://localhost:8000/docs** pour tester chaque endpoint REST directement via l'interface Swagger UI.
+
+### Endpoints principaux
+
+| Méthode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/v1/applications/` | Liste toutes les candidatures |
+| `POST` | `/api/v1/applications/` | Crée une candidature |
+| `PUT` | `/api/v1/applications/{id}` | Met à jour une candidature |
+| `DELETE` | `/api/v1/applications/{id}` | Supprime une candidature |
+| `GET` | `/api/v1/companies/` | Liste les entreprises |
+| `POST` | `/api/v1/companies/` | Crée une entreprise |
+| `POST` | `/api/v1/documents/upload` | Upload un document |
+| `GET` | `/api/v1/notes/` | Liste les notes |
+| `POST` | `/api/v1/scraper/extract` | Extrait le texte d'une URL |
 
 ---
 
-## Configuration
+## ⚙️ Variables d'Environnement
 
-Le fichier `backend/.env` gère la connexion à la base de données :
+Le fichier `backend/.env` contient :
+
 ```env
 DATABASE_URL=postgresql+asyncpg://crm_user:crm_password@localhost:5432/crm_db
 ```
 
----
-
-## Maintenance et Dépannage
-
-- **Docker** : Assurez-vous que le service Docker est opérationnel en cas d'erreur de base de données.
-- **Ports** : Si le port 8000 (Backend) ou 5173 (Frontend) est déjà utilisé, les services proposeront ou nécessiteront un changement de port.
-- **Dépendances** : En cas d'erreur d'exécution, renouvelez l'installation des dépendances (`pip install` ou `npm install`).
+Ces valeurs correspondent à la configuration du `docker-compose.yml`.
 
 ---
 
-## Licence
+## 🐛 Résolution de Problèmes
 
-Ce projet est développé à des fins professionnelles dans le cadre de la recherche d'opportunités en alternance.
+| Problème | Solution |
+|---|---|
+| Docker Compose échoue | Vérifier que Docker Desktop est lancé |
+| Erreur connexion BDD | Vérifier que le conteneur PostgreSQL tourne (`docker ps`) |
+| Port 8000 occupé | Changer le port : `uvicorn app.main:app --reload --port 8001` |
+| Port 5173 occupé | Vite choisira automatiquement un port libre |
+| `npm run dev` échoue | Lancer `npm install` d'abord |
+| Erreur d'import Python | Vérifier que le `venv` est activé |
+
+---
+
+## 📄 Licence
+
+Projet développé dans le cadre d'une recherche d'alternance.
 
 ---
 
 <p align="center">
-  <b>NEXUS</b> — Solution optimisée pour le suivi de carrière
+  <b>NEXUS</b> — Conçu avec ❤️ pour optimiser la recherche d'alternance
 </p>
