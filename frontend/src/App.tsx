@@ -9,14 +9,14 @@ import type { Application, ApplicationStatus } from './types';
 import {
   DndContext,
   DragOverlay,
-  closestCorners,
+  rectIntersection,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
 import type { DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { ApplicationCard } from './components/KanbanBoard/ApplicationCard';
 import { AddApplicationModal } from './components/Modals/AddApplicationModal';
 import { ImportUrlModal } from './components/Modals/ImportUrlModal';
@@ -27,6 +27,7 @@ function App() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [initialStatus, setInitialStatus] = useState<ApplicationStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -38,15 +39,15 @@ function App() {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const fetchApplications = async () => {
-    setLoading(true);
+  const fetchApplications = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const res = await axios.get(`${API_BASE}/applications/`);
       setApplications(res.data);
     } catch (error) {
       console.error("Error fetching applications:", error);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -54,47 +55,93 @@ function App() {
     fetchApplications();
   }, []);
 
+  const findContainer = (id: string) => {
+    if (COLUMNS.some(col => col.id === id)) return id as ApplicationStatus;
+    return applications.find(app => app.id === id)?.status;
+  };
+
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
+    const id = event.active.id as string;
+    setActiveId(id);
+    const app = applications.find(a => a.id === id);
+    if (app) setInitialStatus(app.status);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
     if (!over) return;
-    const activeId = active.id;
-    const overId = over.id;
-    if (activeId === overId) return;
 
-    const activeContainer = applications.find(x => x.id === activeId)?.status;
-    const isOverColumn = COLUMNS.some(col => col.id === overId);
-    const overContainer = isOverColumn ? overId as ApplicationStatus : applications.find(x => x.id === overId)?.status;
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
-    if (!activeContainer || !overContainer || activeContainer === overContainer) return;
+    const activeContainer = findContainer(activeId);
+    const overContainer = findContainer(overId);
+
+    if (!activeContainer || !overContainer || activeContainer === overContainer) {
+      return;
+    }
 
     setApplications((prev) => {
+      const activeIndex = prev.findIndex(i => i.id === activeId);
+      if (activeIndex === -1) return prev;
+
       const newItems = [...prev];
-      const activeAppIndex = newItems.findIndex(x => x.id === activeId);
-      newItems[activeAppIndex] = { ...newItems[activeAppIndex], status: overContainer as ApplicationStatus };
+      newItems[activeIndex] = { ...newItems[activeIndex], status: overContainer };
+      
+      // Move item to the end of the new container visually to avoid flickering
+      const item = newItems.splice(activeIndex, 1)[0];
+      newItems.push(item);
+      
       return newItems;
     });
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
+    const currentActiveId = active.id as string;
+    const currentInitialStatus = initialStatus;
+    
     setActiveId(null);
-    if (!over) return;
-    const activeId = active.id;
+    setInitialStatus(null);
+    
+    if (!over) {
+      // If dropped outside, we might need to revert if optimistically moved
+      fetchApplications(true);
+      return;
+    }
 
-    // We update the DB with its new status
-    const app = applications.find(a => a.id === activeId);
-    if (app) {
+    const overId = over.id as string;
+    const overContainer = findContainer(overId);
+    const activeApp = applications.find(app => app.id === currentActiveId);
+
+    if (!activeApp || !overContainer) {
+      fetchApplications(true);
+      return;
+    }
+
+    // Persist status change if occurred
+    if (overContainer !== currentInitialStatus) {
       try {
-        await axios.put(`${API_BASE}/applications/${app.id}`, {
-          company_id: app.company_id,
-          status: app.status,
+        await axios.put(`${API_BASE}/applications/${activeApp.id}`, {
+          company_id: activeApp.company_id,
+          status: overContainer,
         });
+        // Silent success refresh
+        fetchApplications(true);
       } catch (error) {
         console.error("Failed to update status on server:", error);
+        alert("Erreur de synchronisation. Rechargement du tableau...");
+        fetchApplications();
+      }
+    } else {
+      // Potential reorder within the same column (purely visual for now as index isn't persisted)
+      const overAppId = overId;
+      if (currentActiveId !== overAppId) {
+        const activeIndex = applications.findIndex(a => a.id === currentActiveId);
+        const overIndex = applications.findIndex(a => a.id === overAppId);
+        if (activeIndex !== -1 && overIndex !== -1) {
+          setApplications((items) => arrayMove(items, activeIndex, overIndex));
+        }
       }
     }
   };
@@ -172,10 +219,10 @@ function App() {
               </div>
             ) : (
               <DndContext
-                sensors={sensors} collisionDetection={closestCorners}
+                sensors={sensors} collisionDetection={rectIntersection}
                 onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}
               >
-                <KanbanBoard applications={filteredApplications} onRefresh={fetchApplications} />
+              <KanbanBoard applications={filteredApplications} onRefresh={fetchApplications} />
                 <DragOverlay>
                   {activeApplication ? <ApplicationCard application={activeApplication} onRefresh={fetchApplications} /> : null}
                 </DragOverlay>

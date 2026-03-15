@@ -180,17 +180,49 @@ class ScrapingService:
 
             # Extract company from title
             if not company_name and job_title:
+                # Platforms to filter out
+                platforms = ['indeed', 'linkedin', 'welcome to the jungle', 'glassdoor',
+                             'monster', 'hellowork', 'apec', 'pôle emploi', 'pole emploi',
+                             'france travail', 'meteojob', 'cadremploi', 'jobteaser']
+                
                 for sep in [' - ', ' | ', ' chez ', ' at ', ' — ', ' · ']:
                     if sep in job_title:
-                        parts = job_title.split(sep)
+                        parts = [p.strip() for p in job_title.split(sep)]
                         if len(parts) >= 2:
-                            candidate = parts[-1].strip()
-                            platforms = ['indeed', 'linkedin', 'welcome to the jungle', 'glassdoor',
-                                         'monster', 'hellowork', 'apec', 'pôle emploi', 'pole emploi',
-                                         'france travail', 'meteojob', 'cadremploi', 'jobteaser']
-                            if candidate.lower() not in platforms and len(candidate) < 80:
-                                company_name = candidate
+                            # If the last part is a platform name, try to take the part before it as company
+                            last_part_lower = parts[-1].lower()
+                            if any(p in last_part_lower for p in platforms):
+                                # The last part is just the platform, ignore it and look at what remains
+                                remaining = sep.join(parts[:-1]).strip()
+                                
+                                # Try additional patterns in the remaining string
+                                # Pattern "Company hiring Title"
+                                hiring_match = re.search(r'^(.*?)\s+hiring\s+(.*)$', remaining, re.IGNORECASE)
+                                if hiring_match:
+                                    company_name = hiring_match.group(1).strip()
+                                    job_title = hiring_match.group(2).strip()
+                                else:
+                                    # Pattern "Title at Company"
+                                    at_match = re.search(r'^(.*?)\s+at\s+([^,]+)(?:,.*)?$', remaining, re.IGNORECASE)
+                                    if at_match:
+                                        job_title = at_match.group(1).strip()
+                                        company_name = at_match.group(2).strip()
+                                    else:
+                                        # If no pattern found and we have multiple parts originaly, 
+                                        # maybe the platform was just the 3rd part?
+                                        if len(parts) >= 3:
+                                            company_name = parts[-2]
+                                            job_title = sep.join(parts[:-2]).strip()
+                                        else:
+                                            # Still nothing, just leave it for now
+                                            pass
+                            else:
+                                # Normal case: last part is usually the company
+                                company_name = parts[-1]
                                 job_title = sep.join(parts[:-1]).strip()
+                            
+                            if company_name and len(company_name) > 80:
+                                company_name = None # Reset if too long
                             break
 
             # ========================

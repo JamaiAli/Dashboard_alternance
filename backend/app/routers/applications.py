@@ -13,6 +13,16 @@ router = APIRouter(prefix="/applications", tags=["applications"])
 
 @router.post("/", response_model=ApplicationResponse)
 async def create_application(application: ApplicationCreate, db: AsyncSession = Depends(get_db)):
+    # Check for duplicate job_url
+    if application.job_url:
+        query = select(Application).where(Application.job_url == application.job_url)
+        result = await db.execute(query)
+        if result.scalars().first():
+            raise HTTPException(
+                status_code=409, 
+                detail="Une candidature avec cette URL existe déjà."
+            )
+
     db_application = Application(**application.model_dump())
     db.add(db_application)
     await db.commit()
@@ -20,6 +30,13 @@ async def create_application(application: ApplicationCreate, db: AsyncSession = 
     query = select(Application).options(selectinload(Application.company)).where(Application.id == db_application.id)
     result = await db.execute(query)
     return result.scalars().first()
+
+@router.get("/check")
+async def check_duplicate(url: str, db: AsyncSession = Depends(get_db)):
+    query = select(Application).where(Application.job_url == url)
+    result = await db.execute(query)
+    exists = result.scalars().first() is not None
+    return {"exists": exists}
 
 @router.get("/", response_model=List[ApplicationResponse])
 async def read_applications(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):

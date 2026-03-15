@@ -31,6 +31,24 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
     const [salary, setSalary] = useState(initialData?.salary || '');
     const [jobUrl, setJobUrl] = useState(initialData?.job_url || '');
     const [rawDesc, setRawDesc] = useState(initialData?.raw_description || '');
+    const [urlExists, setUrlExists] = useState(false);
+
+    useEffect(() => {
+        const checkUrl = async () => {
+            if (jobUrl && jobUrl !== initialData?.job_url) {
+                try {
+                    const res = await axios.get(`${API_BASE}/applications/check`, { params: { url: jobUrl } });
+                    setUrlExists(res.data.exists);
+                } catch (e) {
+                    console.error("Error checking URL:", e);
+                }
+            } else {
+                setUrlExists(false);
+            }
+        };
+        const timer = setTimeout(checkUrl, 500);
+        return () => clearTimeout(timer);
+    }, [jobUrl, initialData?.job_url]);
 
     useEffect(() => {
         const fetchCompanies = async () => {
@@ -89,9 +107,13 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
 
             onSuccess();
             onClose();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error creating application:", error);
-            alert("Failed to create application");
+            if (error.response && error.response.status === 409) {
+                alert("Cette offre a déjà été ajoutée (URL identique).");
+            } else {
+                alert("Erreur lors de la création de la candidature.");
+            }
         } finally {
             setLoading(false);
         }
@@ -174,7 +196,15 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE</label>
-                                <input type="url" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={jobUrl} onChange={e => setJobUrl(e.target.value)} />
+                                <input 
+                                    type="url" 
+                                    className={`w-full bg-gray-900 border ${urlExists ? 'border-red-500 animate-pulse' : 'border-gray-700'} text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none`} 
+                                    value={jobUrl} 
+                                    onChange={e => setJobUrl(e.target.value)} 
+                                />
+                                {urlExists && <p className="text-red-500 text-[10px] font-mono mt-1 mt-1 flex items-center gap-1">
+                                    <X className="w-3 h-3" /> CETTE_OFFRE_EXISTE_DÉJÀ.err
+                                </p>}
                             </div>
                         </div>
                         <div className="space-y-1">

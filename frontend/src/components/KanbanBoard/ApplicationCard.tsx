@@ -59,7 +59,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                 {...attributes}
                 {...listeners}
                 onDoubleClick={(e) => { e.stopPropagation(); setIsDetailOpen(true); }}
-                className={`bg-cyber-darker border border-gray-700 p-3 rounded mb-3 cursor-grab hover:border-cyber-cyan transition-colors ${isDragging ? 'opacity-50 ring-2 ring-cyber-cyan z-50' : ''
+                className={`bg-cyber-darker border border-gray-700 p-3 rounded mb-3 cursor-grab hover:border-cyber-cyan transition-colors ${isDragging ? 'opacity-20 grayscale' : ''
                     } ${inactiveClass}`}
             >
                 <div className="flex justify-between items-start mb-2">

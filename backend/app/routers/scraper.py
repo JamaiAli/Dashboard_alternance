@@ -1,6 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 from typing import Optional
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from fastapi import APIRouter, HTTPException, Depends
+from app.database import get_db
+from app.models.application import Application
 from app.services.scraping_service import ScrapingService
 
 router = APIRouter(prefix="/scraper", tags=["scraper"])
@@ -24,7 +28,16 @@ class ScrapeResponse(BaseModel):
 
 
 @router.post("/", response_model=ScrapeResponse)
-async def scrape_job_offer(request: ScrapeRequest):
+async def scrape_job_offer(request: ScrapeRequest, db: AsyncSession = Depends(get_db)):
+    # Check for duplicate job_url before scraping
+    query = select(Application).where(Application.job_url == request.url)
+    result = await db.execute(query)
+    if result.scalars().first():
+        raise HTTPException(
+            status_code=409, 
+            detail="Cette offre a déjà été ajoutée."
+        )
+
     data = ScrapingService.extract_structured_data(request.url)
 
     if data["raw_text"].startswith("Error extracting"):
