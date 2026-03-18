@@ -26,6 +26,7 @@ const API_BASE = 'http://localhost:8000/api/v1';
 function App() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
   const [activeId, setActiveId] = useState<string | null>(null);
   const [initialStatus, setInitialStatus] = useState<ApplicationStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -147,11 +148,20 @@ function App() {
   };
 
   const filteredApplications = applications.filter(app => {
-    if (!searchTerm) return true;
-    const term = searchTerm.toLowerCase();
-    const companyNameMatch = app.company?.name.toLowerCase().includes(term);
-    const techMatch = app.company?.tech_stack?.some(tech => tech.toLowerCase().includes(term));
-    return companyNameMatch || techMatch;
+    // 1. Filter by Search Term
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      const companyNameMatch = app.company?.name.toLowerCase().includes(term);
+      const techMatch = app.company?.tech_stack?.some(tech => tech.toLowerCase().includes(term));
+      if (!companyNameMatch && !techMatch) return false;
+    }
+    
+    // 2. Filter by Type (Stage / Alternance)
+    if (filterType !== 'all' && app.type !== filterType) {
+      return false;
+    }
+    
+    return true;
   });
 
   const activeApplication = activeId ? applications.find(app => app.id === activeId) : null;
@@ -181,8 +191,31 @@ function App() {
             </div>
           </div>
 
-          <div className="w-full md:w-auto flex items-center gap-4">
+          <div className="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4">
             <TechFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+            
+            <div className="h-10 w-px bg-slate-800 hidden sm:block"></div>
+            
+            <div className="flex gap-2 p-1 bg-slate-900 border border-slate-800 rounded-xl w-full sm:w-auto">
+              <button 
+                onClick={() => setFilterType('all')}
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${filterType === 'all' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+              >
+                Tout
+              </button>
+              <button 
+                onClick={() => setFilterType('Alternance')}
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${filterType === 'Alternance' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+              >
+                Alternance
+              </button>
+              <button 
+                onClick={() => setFilterType('Stage')}
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${filterType === 'Stage' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+              >
+                Stage
+              </button>
+            </div>
           </div>
         </header>
 
