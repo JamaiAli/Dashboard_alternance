@@ -182,7 +182,7 @@ function App() {
             </div>
             <div>
               <h1 className="text-2xl font-display font-bold text-white tracking-tight">
-                Nexus <span className="text-slate-500 font-medium text-lg ml-1">Dashboard</span>
+                PathFinder <span className="text-slate-500 font-medium text-lg ml-1">Dashboard</span>
               </h1>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 bg-success rounded-full"></span>

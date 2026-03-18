@@ -1,4 +1,4 @@
-# Dashboard Alternance — NEXUS
+# Dashboard Alternance — PathFinder
 
 > **Dashboard de suivi de candidatures d'alternance** — Interface Kanban cyberpunk pour tracker, organiser et analyser vos candidatures.
 
@@ -12,7 +12,7 @@
 
 ## Description
 
-**NEXUS** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
+**PathFinder** est un outil de suivi de candidatures d'alternance/stage conçu pour centraliser et visualiser l'avancement de vos démarches. Il se compose de :
 
 - Un **tableau Kanban interactif** avec drag & drop pour déplacer vos candidatures entre les étapes (SOUHAITS → POSTULÉ → RELANCE → ENTRETIEN → TEST TECHNIQUE → OFFRE / REFUSÉ).
 - Un **panneau d'analytics** affichant les statistiques en temps réel.
@@ -336,5 +336,5 @@ Projet développé dans le cadre d'une recherche d'alternance.
 ---
 
 <p align="center">
-  <b>NEXUS</b> — Conçu avec ❤️ pour optimiser la recherche d'alternance
+  <b>PathFinder</b> — Conçu avec ❤️ pour optimiser la recherche d'alternance
 </p>
