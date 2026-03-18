@@ -122,60 +122,64 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-[#00ffcc]/30 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center p-4 border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
-                    <h2 className="text-xl text-[#00ffcc] font-mono font-bold flex items-center gap-2">
-                        <Plus className="w-5 h-5" />
-                        AJOUTER_CANDIDATURE.exe
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+                <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900/50 sticky top-0 z-10">
+                    <h2 className="text-xl text-white font-display font-bold flex items-center gap-3">
+                        <div className="p-2 bg-brand-500/10 rounded-lg">
+                            <Plus className="w-5 h-5 text-brand-500" />
+                        </div>
+                        Nouvelle Candidature
                     </h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-xl transition-all">
                         <X className="w-6 h-6" />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="p-8 space-y-8">
                     {/* COMPANY SECTION */}
-                    <div className="space-y-4 bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <div className="flex justify-between items-center mb-2">
-                            <h3 className="text-sm text-gray-400 font-mono">DÉTAILS DE L'ENTREPRISE</h3>
+                    <div className="space-y-5">
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Détails de l'entreprise</h3>
                             <button
                                 type="button"
                                 onClick={() => setIsNewCompany(!isNewCompany)}
-                                className="text-xs text-[#00ffcc] hover:underline focus:outline-none"
+                                className="text-xs font-semibold text-brand-500 hover:text-brand-400 transition-colors"
                             >
-                                {isNewCompany ? "Sélectionner Existante" : "+ Créer Nouvelle"}
+                                {isNewCompany ? "Sélectionner existante" : "+ Créer nouvelle"}
                             </button>
                         </div>
 
                         {isNewCompany ? (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs text-gray-500 font-mono">NOM DE L'ENTREPRISE *</label>
-                                    <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" required value={newCompanyName} onChange={e => setNewCompanyName(e.target.value)} />
+                            <div className="grid grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Nom de l'entreprise *</label>
+                                    <input type="text" className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none transition-all" required value={newCompanyName} onChange={e => setNewCompanyName(e.target.value)} />
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs text-gray-500 font-mono">SECTEUR</label>
-                                    <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" value={newCompanySector} onChange={e => setNewCompanySector(e.target.value)} />
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Secteur</label>
+                                    <input type="text" className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none transition-all" value={newCompanySector} onChange={e => setNewCompanySector(e.target.value)} />
                                 </div>
                             </div>
                         ) : (
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">SÉLECTIONNER ENTREPRISE *</label>
-                                <select className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:ring-1 focus:ring-[#00ffcc] focus:outline-none" value={selectedCompanyId} onChange={e => setSelectedCompanyId(e.target.value)}>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Sélectionner entreprise *</label>
+                                <select className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none transition-all" value={selectedCompanyId} onChange={e => setSelectedCompanyId(e.target.value)}>
                                     {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                 </select>
                             </div>
                         )}
                     </div>
 
+                    <div className="h-px bg-slate-800/50 w-full"></div>
+
                     {/* APPLICATION SECTION */}
-                    <div className="space-y-4 bg-gray-800 p-4 rounded-lg border border-gray-700">
-                        <h3 className="text-sm text-gray-400 font-mono mb-2">DÉTAILS DE LA CANDIDATURE</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">STATUT *</label>
-                                <select className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={status} onChange={e => setStatus(e.target.value as ApplicationStatus)}>
+                    <div className="space-y-5">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Détails de la candidature</h3>
+                        <div className="grid grid-cols-2 gap-5">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Statut *</label>
+                                <select className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:outline-none transition-all" value={status} onChange={e => setStatus(e.target.value as ApplicationStatus)}>
                                     <option value="Wishlist">Liste de souhaits</option>
                                     <option value="Applied">Postulé</option>
                                     <option value="Follow-up">Relance</option>
@@ -185,43 +189,59 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                                     <option value="Rejected">Refusé</option>
                                 </select>
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">TYPE *</label>
-                                <select className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={type} onChange={e => setType(e.target.value as ApplicationType)}>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Type *</label>
+                                <select className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:outline-none transition-all" value={type} onChange={e => setType(e.target.value as ApplicationType)}>
                                     <option value="Alternance">Alternance</option>
                                     <option value="Stage">Stage</option>
                                 </select>
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">SALAIRE PROPOSÉ (€)</label>
-                                <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={salary} onChange={e => setSalary(e.target.value)} />
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Salaire proposé (€)</label>
+                                <input type="text" className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:outline-none transition-all" value={salary} onChange={e => setSalary(e.target.value)} />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">LIEU / EMPLACEMENT</label>
-                                <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={location} onChange={e => setLocation(e.target.value)} />
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Lieu / Emplacement</label>
+                                <input type="text" className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:outline-none transition-all" value={location} onChange={e => setLocation(e.target.value)} />
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE</label>
+                            <div className="space-y-2 col-span-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">URL de l'offre</label>
                                 <input 
                                     type="url" 
-                                    className={`w-full bg-gray-900 border ${urlExists ? 'border-red-500 animate-pulse' : 'border-gray-700'} text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none`} 
+                                    className={`w-full bg-slate-950 border ${urlExists ? 'border-danger' : 'border-slate-800'} text-slate-200 rounded-xl p-3 focus:border-brand-500 focus:outline-none transition-all`} 
                                     value={jobUrl} 
                                     onChange={e => setJobUrl(e.target.value)} 
                                 />
-                                {urlExists && <p className="text-red-500 text-[10px] font-mono mt-1 mt-1 flex items-center gap-1">
-                                    <X className="w-3 h-3" /> CETTE_OFFRE_EXISTE_DÉJÀ.err
+                                {urlExists && <p className="text-danger text-[10px] font-semibold mt-1.5 flex items-center gap-1.5">
+                                    <X className="w-3.5 h-3.5" /> Cette offre existe déjà dans votre suivi.
                                 </p>}
                             </div>
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-xs text-gray-500 font-mono">DESCRIPTION BRUTE</label>
-                            <textarea rows={4} className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={rawDesc} onChange={e => setRawDesc(e.target.value)} />
+                            <div className="space-y-2 col-span-2">
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Description</label>
+                                <textarea rows={4} className="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl p-4 focus:border-brand-500 focus:outline-none transition-all custom-scrollbar placeholder:text-slate-700" value={rawDesc} onChange={e => setRawDesc(e.target.value)} placeholder="Collez la description de l'offre ici..." />
+                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" disabled={loading} className="w-full bg-[#00ffcc] text-gray-900 font-bold py-3 px-4 rounded hover:bg-[#00ffcc]/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'ENREGISTRER LA CANDIDATURE'}
-                    </button>
+                    <div className="pt-4 flex justify-end items-center gap-4">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-6 py-3 text-sm font-semibold text-slate-500 hover:text-white transition-colors"
+                        >
+                            Annuler
+                        </button>
+                        <button type="submit" disabled={loading} className="bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-8 rounded-xl transition-all disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 shadow-lg shadow-brand-600/20">
+                            {loading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    <span>Enregistrement...</span>
+                                </>
+                            ) : (
+                                'Enregistrer la candidature'
+                            )}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

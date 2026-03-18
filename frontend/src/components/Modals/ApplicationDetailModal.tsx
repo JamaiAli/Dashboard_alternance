@@ -29,90 +29,94 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
     };
 
     const statusColor: Record<string, string> = {
-        Wishlist: 'text-gray-400 border-gray-400',
-        Applied: 'text-cyber-cyan border-cyber-cyan',
-        'Follow-up': 'text-orange-400 border-orange-400',
-        Interview: 'text-yellow-400 border-yellow-400',
-        'Technical Test': 'text-purple-400 border-purple-400',
-        Offer: 'text-cyber-green border-cyber-green',
-        Rejected: 'text-cyber-alert border-cyber-alert',
+        Wishlist: 'text-slate-500 border-slate-600 bg-slate-800',
+        Applied: 'text-warning border-warning/30 bg-warning/10', // Jaune
+        'Follow-up': 'text-info border-info/30 bg-info/10', // Bleu
+        Interview: 'text-success border-success/30 bg-success/10', // Vert
+        'Technical Test': 'text-purple-400 border-purple-400/30 bg-purple-400/10',
+        Offer: 'text-emerald-400 border-emerald-400/50 bg-emerald-400/10',
+        Rejected: 'text-danger border-danger/30 bg-danger/10', // Rouge
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={onClose}>
             <div
-                className="bg-gray-900 border border-cyber-cyan/30 rounded-lg shadow-2xl shadow-cyber-cyan/10 w-full max-w-2xl max-h-[85vh] overflow-y-auto"
+                className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto custom-scrollbar"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex justify-between items-center p-5 border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
+                <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900/50 sticky top-0 z-10">
                     <div>
-                        <h2 className="text-xl text-cyber-green font-mono font-bold flex items-center gap-2">
-                            <Building2 className="w-5 h-5" />
+                        <h2 className="text-xl text-white font-display font-bold flex items-center gap-3">
+                            <div className="p-2 bg-brand-500/10 rounded-lg">
+                                <Building2 className="w-5 h-5 text-brand-500" />
+                            </div>
                             {application.company?.name || 'Entreprise inconnue'}
                         </h2>
-                        <p className="text-xs text-gray-500 mt-1 font-mono">ID: {application.id}</p>
+                        <p className="text-xs text-slate-500 mt-2 font-medium tracking-wide">Identifiant: {application.id}</p>
                     </div>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-xl transition-all">
                         <X className="w-6 h-6" />
                     </button>
                 </div>
 
-                <div className="p-5 space-y-5">
+                <div className="p-8 space-y-8">
                     {/* Status & Type badges */}
                     <div className="flex gap-3 flex-wrap">
-                        <span className={`text-xs font-mono px-3 py-1 rounded border ${statusColor[application.status] || 'text-gray-400 border-gray-400'}`}>
+                        <span className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${statusColor[application.status] || 'text-slate-400 border-slate-600 bg-slate-800'} uppercase tracking-wider`}>
                             {statusLabels[application.status] || application.status}
                         </span>
-                        <span className="text-xs font-mono px-3 py-1 rounded border border-gray-600 text-gray-300">
+                        <span className="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 uppercase tracking-wider">
                             {application.type}
                         </span>
                     </div>
 
                     {/* Info grid */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <Briefcase className="w-3.5 h-3.5" />
-                                SECTEUR
+                    <div className="grid grid-cols-2 gap-5">
+                        <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">
+                                <Briefcase className="w-4 h-4 text-slate-500" />
+                                Secteur
                             </div>
-                            <p className="text-sm text-gray-200">{application.company?.sector || '—'}</p>
+                            <p className="text-sm text-slate-200 font-medium">{application.company?.sector || '—'}</p>
                         </div>
 
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <DollarSign className="w-3.5 h-3.5" />
-                                SALAIRE PROPOSÉ
+                        <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">
+                                <DollarSign className="w-4 h-4 text-slate-500" />
+                                Salaire Proposé
                             </div>
-                            <p className="text-sm text-gray-200">
+                            <p className="text-sm text-slate-200 font-medium">
                                 {application.salary_proposed ? `${application.salary_proposed}${application.salary_proposed.includes('€') ? '' : ' €'}` : '—'}
                             </p>
                         </div>
 
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <Calendar className="w-3.5 h-3.5" />
-                                DATE D'ENVOI
+                        <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">
+                                <Calendar className="w-4 h-4 text-slate-500" />
+                                Date d'envoi
                             </div>
-                            <p className="text-sm text-gray-200">{formatDate(application.date_sent)}</p>
+                            <p className="text-sm text-slate-200 font-medium">{formatDate(application.date_sent)}</p>
                         </div>
 
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <MapPin className="w-3.5 h-3.5" />
-                                LIEU
+                        <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">
+                                <MapPin className="w-4 h-4 text-slate-500" />
+                                Lieu
                             </div>
-                            <p className="text-sm text-gray-200">{application.location || '—'}</p>
+                            <p className="text-sm text-slate-200 font-medium">{application.location || '—'}</p>
                         </div>
                     </div>
 
                     {/* Tech Stack */}
                     {application.company?.tech_stack && application.company.tech_stack.length > 0 && (
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <p className="text-xs text-gray-500 font-mono mb-2">TECH STACK</p>
+                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">
+                                Technologies
+                            </div>
                             <div className="flex flex-wrap gap-2">
                                 {application.company.tech_stack.map((tech, i) => (
-                                    <span key={i} className="text-xs bg-cyber-cyan/10 text-cyber-cyan px-2 py-1 rounded border border-cyber-cyan/30">
+                                    <span key={i} className="text-xs bg-slate-800 text-slate-200 px-2.5 py-1 rounded-md border border-slate-700 shadow-sm">
                                         {tech}
                                     </span>
                                 ))}
@@ -122,16 +126,16 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
 
                     {/* Job URL */}
                     {application.job_url && (
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <ExternalLink className="w-3.5 h-3.5" />
-                                LIEN DE L'OFFRE
+                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">
+                                <ExternalLink className="w-4 h-4 text-slate-500" />
+                                Lien de l'offre
                             </div>
                             <a
                                 href={application.job_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-sm text-cyber-cyan hover:underline break-all"
+                                className="text-sm text-brand-400 hover:text-brand-300 hover:underline break-all transition-colors"
                             >
                                 {application.job_url}
                             </a>
@@ -140,14 +144,16 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
 
                     {/* Raw Description */}
                     {application.raw_description && (
-                        <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-2">
-                                <FileText className="w-3.5 h-3.5" />
-                                DESCRIPTION DE L'OFFRE
+                        <div className="bg-slate-800/40 rounded-xl p-5 border border-slate-700/50">
+                            <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">
+                                <FileText className="w-4 h-4 text-slate-500" />
+                                Description de l'offre
                             </div>
-                            <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto pr-2">
-                                {application.raw_description}
-                            </p>
+                            <div className="bg-slate-900 rounded-lg p-4 border border-slate-800">
+                                <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto custom-scrollbar pr-3">
+                                    {application.raw_description}
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>
