@@ -29,6 +29,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
     const [status, setStatus] = useState<ApplicationStatus>('Wishlist');
     const [type, setType] = useState<ApplicationType>((initialData?.contract_type as ApplicationType) || 'Alternance');
     const [salary, setSalary] = useState(initialData?.salary || '');
+    const [location, setLocation] = useState(initialData?.location || '');
     const [jobUrl, setJobUrl] = useState(initialData?.job_url || '');
     const [rawDesc, setRawDesc] = useState(initialData?.raw_description || '');
     const [urlExists, setUrlExists] = useState(false);
@@ -99,6 +100,7 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                 status,
                 type,
                 salary_proposed: salary || null,
+                location: location || null,
                 job_url: jobUrl || null,
                 raw_description: rawDesc || null,
                 date_sent: new Date().toISOString(),
@@ -193,6 +195,10 @@ export function AddApplicationModal({ onClose, onSuccess, initialData }: AddAppl
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500 font-mono">SALAIRE PROPOSÉ (€)</label>
                                 <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={salary} onChange={e => setSalary(e.target.value)} />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs text-gray-500 font-mono">LIEU / EMPLACEMENT</label>
+                                <input type="text" className="w-full bg-gray-900 border border-gray-700 text-gray-200 rounded p-2 focus:border-[#00ffcc] focus:outline-none" value={location} onChange={e => setLocation(e.target.value)} />
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500 font-mono">URL DE L'OFFRE</label>

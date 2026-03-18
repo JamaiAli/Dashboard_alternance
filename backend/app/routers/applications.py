@@ -1,4 +1,5 @@
-from typing import List
+from datetime import datetime, timezone
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -63,6 +64,20 @@ async def update_application(application_id: UUID, application: ApplicationUpdat
         raise HTTPException(status_code=404, detail="Application not found")
     
     update_data = application.model_dump(exclude_unset=True)
+    
+    # Logic for Applied timer and Relance
+    from app.models.application import ApplicationStatus
+    
+    new_status = update_data.get("status")
+    if new_status:
+        # Update last_contact_date on any status change
+        if new_status != db_application.status:
+            db_application.last_contact_date = datetime.now(timezone.utc)
+        
+        # Set date_sent when moving to Applied for the first time
+        if new_status == ApplicationStatus.APPLIED and not db_application.date_sent:
+            db_application.date_sent = datetime.now(timezone.utc)
+            
     for key, value in update_data.items():
         setattr(db_application, key, value)
     

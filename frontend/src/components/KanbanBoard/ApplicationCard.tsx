@@ -3,8 +3,9 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Application } from '../../types';
 import axios from 'axios';
-import { differenceInDays } from 'date-fns';
-import { Paperclip, Trash2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { Trash2, Flag, FileText } from 'lucide-react';
 import { DocumentManager } from '../Documents/DocumentManager';
 import { ApplicationDetailModal } from '../Modals/ApplicationDetailModal';
 
@@ -12,6 +13,18 @@ interface ApplicationCardProps {
     application: Application;
     onRefresh: () => void;
 }
+
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case 'Applied': return 'cyber-warning';
+        case 'Follow-up': return 'cyber-blue';
+        case 'Interview': return 'cyber-green';
+        case 'Technical Test': return 'cyber-purple';
+        case 'Rejected': return 'cyber-alert';
+        case 'Offer': return 'cyber-green';
+        default: return 'cyber-cyan';
+    }
+};
 
 export function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
     const [isDocumentManagerOpen, setIsDocumentManagerOpen] = useState(false);
@@ -31,9 +44,7 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
         transition,
     };
 
-    const handleDelete = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette candidature ?")) return;
+    const handleDelete = async () => {
         try {
             await axios.delete(`http://localhost:8000/api/v1/applications/${application.id}`);
             onRefresh();
@@ -42,14 +53,22 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
         }
     };
 
-    const daysInactive = differenceInDays(new Date(), new Date(application.last_contact_date));
+    const handleToggleFlag = async () => {
+        try {
+            await axios.put(`http://localhost:8000/api/v1/applications/${application.id}`, {
+                is_flagged: !application.is_flagged
+            });
+            onRefresh();
+        } catch (error) {
+            console.error("Failed to toggle flag:", error);
+        }
+    };
 
-    let inactiveClass = '';
-    if (daysInactive >= 10 && application.status !== 'Rejected' && application.status !== 'Offer') {
-        inactiveClass = 'border-cyber-alert shadow-[0_0_8px_rgba(255,0,60,0.3)] !border-l-4';
-    } else if (daysInactive >= 7 && application.status !== 'Rejected' && application.status !== 'Offer') {
-        inactiveClass = 'border-cyber-warning shadow-[0_0_8px_rgba(255,176,0,0.3)] !border-l-4';
-    }
+    const decodeHTML = (html: string) => {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    };
 
     return (
         <>
@@ -58,43 +77,71 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
                 style={style}
                 {...attributes}
                 {...listeners}
-                onDoubleClick={(e) => { e.stopPropagation(); setIsDetailOpen(true); }}
-                className={`bg-cyber-darker border border-gray-700 p-3 rounded mb-3 cursor-grab hover:border-cyber-cyan transition-colors ${isDragging ? 'opacity-20 grayscale' : ''
-                    } ${inactiveClass}`}
+                onClick={() => setIsDetailOpen(true)}
+                className={`group relative bg-slate-900 border border-slate-800 hover:border-slate-700 p-4 rounded-xl transition-all duration-200 cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-30 scale-95 shadow-none' : 'opacity-100 shadow-sm hover:shadow-md'}`}
             >
-                <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-cyber-green text-sm truncate pr-2">
-                        {application.company?.name || 'Entreprise inconnue'}
+                {application.is_flagged && (
+                    <div className="absolute top-3 right-3">
+                        <div className="w-2 h-2 rounded-full bg-danger shadow-[0_0_8px_rgba(239,68,68,0.4)]"></div>
+                    </div>
+                )}
+
+                <div className="flex flex-col mb-4">
+                    <h4 className="text-slate-100 font-display font-bold text-base tracking-tight mb-1 group-hover:text-brand-500 transition-colors">
+                        {decodeHTML(application.company?.name || 'Inconnue')}
                     </h4>
-                    <span className="text-[10px] bg-cyber-black px-1 py-0.5 rounded text-gray-400 border border-gray-800">
-                        {application.type}
-                    </span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 uppercase tracking-wider">
+                            {application.type}
+                        </span>
+                        {application.company?.sector && (
+                            <span className="text-[10px] font-medium text-slate-500">
+                                {application.company.sector}
+                            </span>
+                        )}
+                    </div>
                 </div>
 
-                <div className="text-xs text-gray-400 flex flex-col gap-1">
-                    <p className="truncate">{application.company?.sector || 'Secteur non défini'}</p>
-                    <div className="flex justify-between items-center mt-2 border-t border-gray-800 pt-2">
-                        <span className={`text-[10px] ${daysInactive >= 10 ? 'text-cyber-alert' : 'text-gray-500'}`}>
-                            Inactif : {daysInactive}j
+                <div className="flex justify-between items-center pt-3 border-t border-slate-800/50">
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-[11px] font-medium text-slate-500">
+                            {formatDistanceToNow(new Date(application.last_contact_date), { addSuffix: true, locale: fr })}
                         </span>
-                        <div className="flex gap-1">
-                            <button
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onClick={() => setIsDocumentManagerOpen(true)}
-                                className="bg-gray-800 p-1.5 rounded hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
-                                title="Gérer les documents"
-                            >
-                                <Paperclip className="w-4 h-4" />
-                            </button>
-                            <button
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onClick={handleDelete}
-                                className="bg-gray-800 p-1.5 rounded hover:bg-cyber-alert/20 hover:text-cyber-alert transition-colors"
-                                title="Supprimer la candidature"
-                            >
-                                <Trash2 className="w-4 h-4" />
-                            </button>
-                        </div>
+                    </div>
+
+                    <div className="flex gap-1">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleFlag();
+                            }}
+                            className={`p-1.5 rounded-lg hover:bg-slate-800 transition-colors ${application.is_flagged ? 'text-danger' : 'text-slate-600'}`}
+                            title="Marquer comme prioritaire"
+                        >
+                            <Flag className="w-3.5 h-3.5" fill={application.is_flagged ? "currentColor" : "none"} />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsDocumentManagerOpen(true);
+                            }}
+                            className="p-1.5 text-slate-600 hover:text-brand-500 hover:bg-slate-800 rounded-lg transition-colors"
+                            title="Documents"
+                        >
+                            <FileText className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (confirm('Supprimer cette candidature ?')) {
+                                    handleDelete();
+                                }
+                            }}
+                            className="p-1.5 text-slate-600 hover:text-danger hover:bg-slate-800 rounded-lg transition-colors"
+                            title="Supprimer"
+                        >
+                            <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                     </div>
                 </div>
             </div>

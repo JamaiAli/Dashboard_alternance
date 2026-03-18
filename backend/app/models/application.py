@@ -1,7 +1,7 @@
 import enum
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, Float, DateTime, Enum, ForeignKey, Text
+from sqlalchemy import Column, String, Float, DateTime, Enum, ForeignKey, Text, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
@@ -30,7 +30,9 @@ class Application(Base):
     salary_proposed = Column(String, nullable=True)
     type = Column(Enum(ApplicationType, native_enum=False), default=ApplicationType.ALTERNANCE)
     job_url = Column(String, nullable=True)
+    location = Column(String, nullable=True)
     raw_description = Column(Text, nullable=True)
+    is_flagged = Column(Boolean, default=False)
 
     company = relationship("Company", back_populates="applications")
     documents = relationship("Document", back_populates="application", cascade="all, delete-orphan")

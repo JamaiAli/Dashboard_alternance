@@ -15,18 +15,37 @@ export function KanbanColumn({ id, title, applications, onRefresh }: KanbanColum
         id: id,
     });
 
+    const getStatusColor = (status: ApplicationStatus) => {
+        switch (status) {
+            case 'Applied': return 'cyber-warning';
+            case 'Follow-up': return 'cyber-blue';
+            case 'Interview': return 'cyber-green';
+            case 'Technical Test': return 'cyber-purple';
+            case 'Rejected': return 'cyber-alert';
+            case 'Offer': return 'cyber-green';
+            default: return 'cyber-cyan';
+        }
+    };
+
+    const colorClass = getStatusColor(id);
+
     return (
-        <div className="flex flex-col flex-1 min-w-[250px] bg-cyber-black border border-cyber-green/20 rounded shadow-[inset_0_0_10px_rgba(0,255,65,0.02)]">
-            <div className="p-3 border-b border-cyber-green/20 bg-cyber-dark/50 flex justify-between items-center">
-                <h3 className="font-bold text-cyber-cyan text-sm">{title}</h3>
-                <span className="text-xs bg-cyber-darker px-2 py-1 rounded text-gray-400">
+        <div className="flex flex-col flex-1 min-w-[320px] h-full bg-slate-900/20 border-r border-slate-800/50 last:border-r-0">
+            <div className="px-5 py-4 flex justify-between items-center bg-slate-900/40 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800/50">
+                <div className="flex items-center gap-2.5">
+                    <div className={`w-2 h-2 rounded-full bg-${colorClass === 'cyber-warning' ? 'warning' : colorClass === 'cyber-blue' ? 'info' : colorClass === 'cyber-green' ? 'success' : colorClass === 'cyber-alert' ? 'danger' : 'slate-500'}`}></div>
+                    <h3 className="font-display font-bold text-sm text-slate-200 tracking-tight">
+                        {title}
+                    </h3>
+                </div>
+                <span className="text-[10px] font-bold text-slate-500 bg-slate-800/50 px-2 py-0.5 rounded-md border border-slate-700/50">
                     {applications.length}
                 </span>
             </div>
 
             <div
                 ref={setNodeRef}
-                className="flex-1 p-2 overflow-y-auto min-h-[300px] kanban-column-scroll"
+                className="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar"
             >
                 <SortableContext
                     items={applications.map(app => app.id)}
@@ -38,8 +57,8 @@ export function KanbanColumn({ id, title, applications, onRefresh }: KanbanColum
                 </SortableContext>
 
                 {applications.length === 0 && (
-                    <div className="h-full w-full flex items-center justify-center text-gray-600 text-xs text-center p-4 border-2 border-dashed border-gray-800 rounded">
-                        Déposez les éléments ici
+                    <div className="py-12 flex flex-col items-center justify-center text-slate-600 text-[11px] font-medium border-2 border-dashed border-slate-800/50 rounded-2xl mx-2">
+                        Aucune candidature ici
                     </div>
                 )}
             </div>

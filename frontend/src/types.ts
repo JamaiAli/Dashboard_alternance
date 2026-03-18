@@ -21,7 +21,9 @@ export interface Application {
     salary_proposed: string | null;
     type: ApplicationType;
     job_url: string | null;
+    location: string | null;
     raw_description: string | null;
+    is_flagged: boolean;
     company?: {
         id: string;
         name: string;

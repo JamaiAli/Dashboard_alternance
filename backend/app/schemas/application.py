@@ -13,7 +13,9 @@ class ApplicationBase(BaseModel):
     salary_proposed: Optional[str] = None
     type: Optional[ApplicationType] = ApplicationType.ALTERNANCE
     job_url: Optional[str] = None
+    location: Optional[str] = None
     raw_description: Optional[str] = None
+    is_flagged: Optional[bool] = False
 
 class ApplicationCreate(ApplicationBase):
     pass

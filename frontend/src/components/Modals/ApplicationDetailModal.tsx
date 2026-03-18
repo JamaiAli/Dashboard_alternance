@@ -1,4 +1,4 @@
-import { X, ExternalLink, Building2, Briefcase, Calendar, DollarSign, FileText } from 'lucide-react';
+import { X, ExternalLink, Building2, Briefcase, Calendar, DollarSign, FileText, MapPin } from 'lucide-react';
 import type { Application } from '../../types';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -99,10 +99,10 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
 
                         <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
                             <div className="flex items-center gap-2 text-gray-500 text-xs font-mono mb-1">
-                                <Calendar className="w-3.5 h-3.5" />
-                                DERNIER CONTACT
+                                <MapPin className="w-3.5 h-3.5" />
+                                LIEU
                             </div>
-                            <p className="text-sm text-gray-200">{formatDate(application.last_contact_date)}</p>
+                            <p className="text-sm text-gray-200">{application.location || '—'}</p>
                         </div>
                     </div>
 

@@ -163,74 +163,89 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-cyber-black text-gray-300 font-mono p-4 md:p-6 flex flex-col">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 border-b border-cyber-green/30 pb-4 gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3 text-cyber-green">
-            <Terminal className="w-8 h-8" />
-            [NEXUS]
-          </h1>
-          <p className="text-sm text-gray-500 mt-2">&gt; STATUT SYSTÈME : EN LIGNE</p>
-        </div>
-
-        <TechFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      </header>
-
-      <main className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
-        <aside className="lg:col-span-1 flex flex-col gap-6">
-          <AnalyticsWidget applications={applications} />
-
-          <div className="border border-cyber-cyan/30 p-4 rounded bg-cyber-darker flex-1">
-            <div className="flex justify-between items-center mb-4 border-b border-gray-800 pb-2">
-              <h3 className="text-cyber-cyan font-bold text-sm">PALETTE_DE_COMMANDES</h3>
+    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans p-4 md:p-6 lg:p-8 flex flex-col items-center">
+      <div className="w-full max-w-[1600px] flex flex-col flex-1">
+        <header className="flex flex-col md:flex-row justify-between items-center mb-10 pb-6 border-b border-slate-800 gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-600/20">
+              <Terminal className="w-6 h-6 text-white" />
             </div>
-            <button
-              onClick={() => { setInitialData(undefined); setIsAddOpen(true); }}
-              className="w-full text-left px-4 py-3 bg-cyber-green/10 text-cyber-green hover:bg-cyber-green/20 transition-all font-bold border border-cyber-green rounded mb-3 flex justify-between items-center group"
-            >
-              <span>+ AJOUTER_CANDIDATURE</span>
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity">_</span>
-            </button>
-            <button
-              onClick={() => setIsImportOpen(true)}
-              className="w-full text-left px-4 py-3 bg-cyber-cyan/5 text-gray-400 hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-all border border-gray-800 hover:border-cyber-cyan rounded mb-3"
-            >
-              &gt; IMPORTER_VIA_URL
-            </button>
-            <button
-              onClick={() => alert("L'interface des documents est accessible par candidature dans les cartes du tableau Kanban.")}
-              className="w-full text-left px-4 py-3 bg-cyber-cyan/5 text-gray-400 hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-all border border-gray-800 hover:border-cyber-cyan rounded"
-            >
-              &gt; VOIR_DOCUMENTS
-            </button>
-          </div>
-        </aside>
-
-        <section className="lg:col-span-3 border border-cyber-green/30 p-4 rounded bg-cyber-dark shadow-[0_0_15px_rgba(0,255,65,0.05)] flex flex-col min-h-[600px]">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-sm md:text-base text-cyber-cyan">&gt; vue_actuelle : tableau_kanban.exe</h2>
-            <span className="text-xs text-gray-500">Filtré : {filteredApplications.length} entrées</span>
-          </div>
-
-          <div className="flex-1 overflow-hidden">
-            {loading ? (
-              <div className="h-full flex items-center justify-center text-cyber-cyan animate-pulse">
-                [CHARGEMENT_MODULE_DONNÉES...]
+            <div>
+              <h1 className="text-2xl font-display font-bold text-white tracking-tight">
+                Nexus <span className="text-slate-500 font-medium text-lg ml-1">Dashboard</span>
+              </h1>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="w-1.5 h-1.5 bg-success rounded-full"></span>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Système Opérationnel</p>
               </div>
-            ) : (
-              <DndContext
-                sensors={sensors} collisionDetection={rectIntersection}
-                onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}
-              >
-              <KanbanBoard applications={filteredApplications} onRefresh={fetchApplications} />
-                <DragOverlay>
-                  {activeApplication ? <ApplicationCard application={activeApplication} onRefresh={fetchApplications} /> : null}
-                </DragOverlay>
-              </DndContext>
-            )}
+            </div>
           </div>
-        </section>
-      </main>
+
+          <div className="w-full md:w-auto flex items-center gap-4">
+            <TechFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+          </div>
+        </header>
+
+        <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0">
+          <aside className="lg:col-span-3 flex flex-col gap-6">
+            <section className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl shadow-sm">
+              <AnalyticsWidget applications={applications} />
+            </section>
+
+            <section className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl shadow-sm flex flex-col flex-1">
+              <h3 className="text-slate-400 font-bold text-[10px] tracking-[0.1em] uppercase mb-6">Actions Rapides</h3>
+              <div className="space-y-3">
+                <button
+                  onClick={() => { setInitialData(undefined); setIsAddOpen(true); }}
+                  className="w-full px-4 py-3 bg-brand-600 hover:bg-brand-500 text-white transition-all font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-600/10 group"
+                >
+                  <span className="text-lg">+</span>
+                  <span>Nouvelle Candidature</span>
+                </button>
+                <button
+                  onClick={() => setIsImportOpen(true)}
+                  className="w-full px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all font-semibold border border-slate-700 rounded-xl flex items-center justify-center gap-2"
+                >
+                  <span>Importer via URL</span>
+                </button>
+              </div>
+            </section>
+          </aside>
+
+          <section className="lg:col-span-9 bg-slate-900/30 border border-slate-800 rounded-2xl shadow-sm flex flex-col min-h-[700px] overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xs font-bold tracking-wider text-slate-400 uppercase">Suivi Kanban</h2>
+              </div>
+              <span className="text-[10px] font-bold text-slate-500 bg-slate-800 px-2.5 py-1 rounded-full">{filteredApplications.length} Candidatures</span>
+            </div>
+
+            <div className="flex-1 overflow-hidden p-4">
+              {loading ? (
+                <div className="h-full flex items-center justify-center text-slate-500 font-medium">
+                  Chargement de votre espace de travail...
+                </div>
+              ) : (
+                <DndContext
+                  sensors={sensors} collisionDetection={rectIntersection}
+                  onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}
+                >
+                  <div className="h-full">
+                    <KanbanBoard applications={filteredApplications} onRefresh={fetchApplications} />
+                  </div>
+                  <DragOverlay dropAnimation={null}>
+                    {activeApplication ? (
+                      <div className="scale-105 shadow-2xl ring-2 ring-brand-500/20 rounded-xl overflow-hidden rotate-1">
+                        <ApplicationCard application={activeApplication} onRefresh={fetchApplications} />
+                      </div>
+                    ) : null}
+                  </DragOverlay>
+                </DndContext>
+              )}
+            </div>
+          </section>
+        </main>
+      </div>
 
       {isAddOpen && (
         <AddApplicationModal
