@@ -38,7 +38,7 @@ async def scrape_job_offer(request: ScrapeRequest, db: AsyncSession = Depends(ge
             detail="Cette offre a déjà été ajoutée."
         )
 
-    data = ScrapingService.extract_structured_data(request.url)
+    data = await ScrapingService.extract_structured_data(request.url)
 
     if data["raw_text"].startswith("Error extracting"):
         raise HTTPException(status_code=400, detail=data["raw_text"])

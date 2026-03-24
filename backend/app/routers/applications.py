@@ -74,8 +74,8 @@ async def update_application(application_id: UUID, application: ApplicationUpdat
         if new_status != db_application.status:
             db_application.last_contact_date = datetime.now(timezone.utc)
         
-        # Set date_sent when moving to Applied for the first time
-        if new_status == ApplicationStatus.APPLIED and not db_application.date_sent:
+        # Set date_sent when moving to Applied
+        if new_status == ApplicationStatus.APPLIED and db_application.status == ApplicationStatus.WISHLIST:
             db_application.date_sent = datetime.now(timezone.utc)
             
     for key, value in update_data.items():

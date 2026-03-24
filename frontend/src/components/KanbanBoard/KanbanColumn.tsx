@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type { Application, ApplicationStatus } from '../../types';
@@ -29,6 +30,8 @@ export function KanbanColumn({ id, title, applications, onRefresh }: KanbanColum
 
     const colorClass = getStatusColor(id);
 
+    const itemIds = useMemo(() => applications.map(app => app.id), [applications]);
+
     return (
         <div className="flex flex-col flex-1 min-w-[320px] h-full bg-slate-900/20 border-r border-slate-800/50 last:border-r-0">
             <div className="px-5 py-4 flex justify-between items-center bg-slate-900/40 backdrop-blur-md sticky top-0 z-10 border-b border-slate-800/50">
@@ -48,7 +51,7 @@ export function KanbanColumn({ id, title, applications, onRefresh }: KanbanColum
                 className="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar"
             >
                 <SortableContext
-                    items={applications.map(app => app.id)}
+                    items={itemIds}
                     strategy={verticalListSortingStrategy}
                 >
                     {applications.map((app) => (

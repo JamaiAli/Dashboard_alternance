@@ -66,19 +66,57 @@ class ScrapingService:
             return f"Error extracting text: {str(e)}"
 
     @staticmethod
-    def extract_structured_data(url: str) -> dict:
+    async def get_html_with_playwright(url: str) -> str:
+        import asyncio
+        import sys
+        import os
+        from pathlib import Path
+        
+        # Path to the virtual environment python
+        backend_dir = Path(__file__).parent.parent.parent
+        python_exe = backend_dir / "venv" / "Scripts" / "python.exe"
+        
+        # Fallback to sys.executable if venv python disappears
+        if not python_exe.exists():
+            python_exe = sys.executable
+            
+        # Get path to fetch_html.py in the same directory
+        script_path = Path(__file__).parent / "fetch_html.py"
+        
+        import subprocess
+        
+        def run_scraper():
+            result = subprocess.run(
+                [str(python_exe), str(script_path), url],
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='ignore'
+            )
+            if result.returncode != 0:
+                raise Exception(f"Playwright extraction failed: {result.stderr}")
+            return result.stdout
+            
+        return await asyncio.to_thread(run_scraper)
+
+    @staticmethod
+    async def extract_structured_data(url: str) -> dict:
         """
         Extracts structured job data from a URL.
         Returns separate sections: job_title, company_name, location, salary, description, benefits, contract_type, sector.
         """
         try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-            }
-            response = requests.get(url, headers=headers, timeout=10)
-            response.raise_for_status()
+            if "indeed.com" in url.lower() or "linkedin.com" in url.lower():
+                html_content = await ScrapingService.get_html_with_playwright(url)
+            else:
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+                }
+                response = requests.get(url, headers=headers, timeout=10)
+                response.raise_for_status()
+                html_content = response.text
 
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup(html_content, 'html.parser')
 
             # ========================
             # 1. JSON-LD EXTRACTION

@@ -85,14 +85,11 @@ function App() {
     setApplications((prev) => {
       const activeIndex = prev.findIndex(i => i.id === activeId);
       if (activeIndex === -1) return prev;
+      
+      if (prev[activeIndex].status === overContainer) return prev;
 
       const newItems = [...prev];
       newItems[activeIndex] = { ...newItems[activeIndex], status: overContainer };
-      
-      // Move item to the end of the new container visually to avoid flickering
-      const item = newItems.splice(activeIndex, 1)[0];
-      newItems.push(item);
-      
       return newItems;
     });
   };
