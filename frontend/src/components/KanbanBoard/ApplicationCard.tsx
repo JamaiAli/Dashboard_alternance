@@ -12,21 +12,12 @@ import { ApplicationDetailModal } from '../Modals/ApplicationDetailModal';
 interface ApplicationCardProps {
     application: Application;
     onRefresh: () => void;
+    isOverlay?: boolean;
 }
 
-const getStatusColor = (status: string) => {
-    switch (status) {
-        case 'Applied': return 'cyber-warning';
-        case 'Follow-up': return 'cyber-blue';
-        case 'Interview': return 'cyber-green';
-        case 'Technical Test': return 'cyber-purple';
-        case 'Rejected': return 'cyber-alert';
-        case 'Offer': return 'cyber-green';
-        default: return 'cyber-cyan';
-    }
-};
 
-export function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
+
+export function ApplicationCard({ application, onRefresh, isOverlay = false }: ApplicationCardProps) {
     const [isDocumentManagerOpen, setIsDocumentManagerOpen] = useState(false);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
 
@@ -37,7 +28,10 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
         transform,
         transition,
         isDragging,
-    } = useSortable({ id: application.id, data: { ...application } });
+    } = useSortable({ 
+        id: application.id, 
+        data: { ...application }
+    });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -73,12 +67,12 @@ export function ApplicationCard({ application, onRefresh }: ApplicationCardProps
     return (
         <>
             <div
-                ref={setNodeRef}
-                style={style}
-                {...attributes}
-                {...listeners}
+                ref={isOverlay ? undefined : setNodeRef}
+                style={isOverlay ? undefined : style}
+                {...(isOverlay ? {} : attributes)}
+                {...(isOverlay ? {} : listeners)}
                 onClick={() => setIsDetailOpen(true)}
-                className={`group relative bg-slate-900 border border-slate-800 hover:border-slate-700 p-4 rounded-xl transition-all duration-200 cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-30 scale-95 shadow-none' : 'opacity-100 shadow-sm hover:shadow-md'}`}
+                className={`group relative bg-slate-900 border border-slate-800 hover:border-slate-700 p-4 rounded-xl transition-all duration-200 ${isOverlay ? 'cursor-grabbing shadow-2xl' : 'cursor-grab active:cursor-grabbing'} ${isDragging && !isOverlay ? 'opacity-30 scale-95 shadow-none' : 'opacity-100 shadow-sm hover:shadow-md'}`}
             >
                 {application.is_flagged && (
                     <div className="absolute top-3 right-3">

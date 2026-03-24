@@ -266,7 +266,7 @@ function App() {
                   <DragOverlay dropAnimation={null}>
                     {activeApplication ? (
                       <div className="scale-105 shadow-2xl ring-2 ring-brand-500/20 rounded-xl overflow-hidden rotate-1">
-                        <ApplicationCard application={activeApplication} onRefresh={fetchApplications} />
+                        <ApplicationCard application={activeApplication} onRefresh={fetchApplications} isOverlay={true} />
                       </div>
                     ) : null}
                   </DragOverlay>
