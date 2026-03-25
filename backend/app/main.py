@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.routers import companies, applications, documents, notes, scraper
+from app.routers import companies, applications, documents, notes, scraper, export
 
 @app.get("/")
 def read_root():
@@ -23,3 +23,4 @@ app.include_router(applications.router, prefix="/api/v1")
 app.include_router(documents.router, prefix="/api/v1")
 app.include_router(notes.router, prefix="/api/v1")
 app.include_router(scraper.router, prefix="/api/v1")
+app.include_router(export.router, prefix="/api/v1")

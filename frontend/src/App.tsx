@@ -20,6 +20,7 @@ import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { ApplicationCard } from './components/KanbanBoard/ApplicationCard';
 import { AddApplicationModal } from './components/Modals/AddApplicationModal';
 import { ImportUrlModal } from './components/Modals/ImportUrlModal';
+import { ExportButton } from './components/Export/ExportButton';
 
 const API_BASE = 'http://localhost:8000/api/v1';
 
@@ -247,7 +248,10 @@ function App() {
               <div className="flex items-center gap-2">
                 <h2 className="text-xs font-bold tracking-wider text-slate-400 uppercase">Suivi Kanban</h2>
               </div>
-              <span className="text-[10px] font-bold text-slate-500 bg-slate-800 px-2.5 py-1 rounded-full">{filteredApplications.length} Candidatures</span>
+              <div className="flex items-center gap-3">
+                <ExportButton />
+                <span className="text-[10px] font-bold text-slate-500 bg-slate-800 px-2.5 py-1 rounded-full">{filteredApplications.length} Candidatures</span>
+              </div>
             </div>
 
             <div className="flex-1 overflow-hidden p-4">
