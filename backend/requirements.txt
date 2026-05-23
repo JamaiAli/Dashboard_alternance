@@ -10,3 +10,6 @@ beautifulsoup4
 python-multipart
 aiofiles
 pypdf
+pandas
+openpyxl
+fpdf
