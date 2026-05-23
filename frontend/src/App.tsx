@@ -22,7 +22,7 @@ import { AddApplicationModal } from './components/Modals/AddApplicationModal';
 import { ImportUrlModal } from './components/Modals/ImportUrlModal';
 import { ExportButton } from './components/Export/ExportButton';
 
-const API_BASE = 'http://localhost:8000/api/v1';
+import { API_BASE } from './config';
 
 function App() {
   const [applications, setApplications] = useState<Application[]>([]);

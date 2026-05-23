@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Upload, Download, FileText, Loader2, X, Trash2 } from 'lucide-react';
 import type { Application } from '../../types';
+import { API_BASE } from '../../config';
 
 interface DocumentManagerProps {
     application: Application;
@@ -24,8 +25,6 @@ export function DocumentManager({ application, onClose }: DocumentManagerProps) 
     const [file, setFile] = useState<File | null>(null);
     const [docType, setDocType] = useState<'CV' | 'LM' | 'Other'>('CV');
     const [versionName, setVersionName] = useState('');
-
-    const API_BASE = 'http://localhost:8000/api/v1';
 
     const fetchDocuments = useCallback(async () => {
         setLoading(true);

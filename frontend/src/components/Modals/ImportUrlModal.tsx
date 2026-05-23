@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Loader2, X, Globe } from 'lucide-react';
+import { API_BASE } from '../../config';
 
 interface ImportUrlModalProps {
     onClose: () => void;
@@ -30,7 +31,7 @@ export function ImportUrlModal({ onClose, onSuccess }: ImportUrlModalProps) {
 
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:8000/api/v1/scraper/', { url });
+            const res = await axios.post(`${API_BASE}/scraper/`, { url });
             onSuccess({
                 job_url: url,
                 raw_description: res.data.raw_text,

@@ -8,6 +8,7 @@ import { fr } from 'date-fns/locale';
 import { Trash2, Flag, FileText } from 'lucide-react';
 import { DocumentManager } from '../Documents/DocumentManager';
 import { ApplicationDetailModal } from '../Modals/ApplicationDetailModal';
+import { API_BASE } from '../../config';
 
 interface ApplicationCardProps {
     application: Application;
@@ -40,7 +41,7 @@ export function ApplicationCard({ application, onRefresh, isOverlay = false }: A
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/applications/${application.id}`);
+            await axios.delete(`${API_BASE}/applications/${application.id}`);
             onRefresh();
         } catch (error) {
             console.error("Failed to delete application:", error);
@@ -49,7 +50,7 @@ export function ApplicationCard({ application, onRefresh, isOverlay = false }: A
 
     const handleToggleFlag = async () => {
         try {
-            await axios.put(`http://localhost:8000/api/v1/applications/${application.id}`, {
+            await axios.put(`${API_BASE}/applications/${application.id}`, {
                 is_flagged: !application.is_flagged
             });
             onRefresh();

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Download, FileText, FileSpreadsheet, Loader2, ChevronDown } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE } from '../../config';
 
 export function ExportButton() {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ export function ExportButton() {
         setIsOpen(false);
         try {
             const response = await axios.get(
-                `http://localhost:8000/api/v1/export/${format}`,
+                `${API_BASE}/export/${format}`,
                 { responseType: 'blob' } // Important to handle binary files
             );
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Loader2, X, Plus } from 'lucide-react';
 import type { ApplicationStatus, ApplicationType } from '../../types';
+import { API_BASE } from '../../config';
 
 interface AddApplicationModalProps {
     onClose: () => void;
@@ -14,8 +15,6 @@ interface Company {
     name: string;
     sector: string | null;
 }
-
-const API_BASE = 'http://localhost:8000/api/v1';
 
 export function AddApplicationModal({ onClose, onSuccess, initialData }: AddApplicationModalProps) {
     const [companies, setCompanies] = useState<Company[]>([]);
